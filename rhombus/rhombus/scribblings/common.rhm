@@ -31,6 +31,7 @@ export:
   comma
   colon
   vbar
+  envvar
   more_args
   shrubref
   shrublink
@@ -111,3 +112,5 @@ def getting_started_doc = ModulePath'lib("rhombus/scribblings/getting-started/rh
 def raco_doc = ModulePath'lib("scribblings/raco/raco.scrbl")'
 
 fun top_ref(): @manual.elem{the full @manual.seclink(~doc: top_doc, "top"){Rhombus Documentation}}
+
+def envvar = manual.tt

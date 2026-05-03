@@ -4,6 +4,7 @@ import:
   lib("racket/base.rkt") as rkt
   "error.rhm" open
   "version.rkt" as rhombus_version
+  "enum.rhm" open
 
 export:
   system
@@ -26,6 +27,7 @@ namespace system:
     milliseconds
     exit
     TargetMachineSymbol
+    PathSymbol
 
   fun type() :~ Symbol:
     rkt.#{system-type}()
@@ -66,14 +68,42 @@ namespace system:
   fun language_and_country() :~ String:
     to_string(rkt.#{system-language+country}())
 
-  fun path(which :: Symbol):
-    ~who: who
-    match which
-    | #'temp_dir: rkt.#{find-system-path}(#'#{temp-dir})
-    | ~else:
-        error(~who: who,
-              "unrecognized symbol",
-              error.val(~label: "symbol", which))
+  namespace system:
+    export PathSymbol
+    enum PathSymbol
+    | home_dir
+    | temp_dir
+    | pref_dir
+    | pref_file
+    | addon_dir
+    | host_addon_dir
+    | cache_dir
+    | doc_dir
+    | desk_dir
+    | sys_dir
+    | exec_file
+    | run_file
+    | orig_dir
+  import .system.PathSymbol
+
+  def path_symbols:
+    { #'home_dir: #'#{home-dir},
+      #'temp_dir: #'#{temp-dir},
+      #'pref_dir: #'#{pref-dir},
+      #'pref_file: #'#{pref-file},
+      #'addon_dir: #'#{addon-dir},
+      #'host_addon_dir: #'#{host-addon-dir},
+      #'cache_dir: #'#{cache-dir},
+      #'doc_dir: #'#{doc-dir},
+      #'desk_dir: #'#{desk-dir},
+      #'sys_dir: #'#{sys-dir},
+      #'exec_file: #'#{exec-file},
+      #'run_file: #'#{run-file},
+      #'orig_dir: #'#{orig-dir} }
+
+  fun path(which :: system.PathSymbol):
+    ~who: who          
+    rkt.#{find-system-path}(path_symbols[which])
 
   fun seconds() :~ Int:
     rkt.#{current-seconds}()
