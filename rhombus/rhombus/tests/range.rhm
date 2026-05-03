@@ -1914,7 +1914,7 @@ block:
   check:
     ((1 .. 10)
        |> SequenceRange.rest(_)
-       |> SequenceRange.rest(_)
+       |> (_.rest)
        |> SequenceRange.first(_))
       < dynamic(4)
     ~is #true

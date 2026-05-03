@@ -1031,7 +1031,7 @@ block:
   check:
     ((10 >=.. 0)
        |> DescendingRange.rest(_)
-       |> DescendingRange.rest(_)
+       |> (_.rest)
        |> DescendingRange.first(_))
       > dynamic(7)
     ~is #true
