@@ -71,7 +71,7 @@ provided by the operating system.
     ~close_original: close_original = #false,
     ~shutdown_on_close: shutdown_on_close = #false,
     ~exn: exn :: (String, Continuation.Marks) -> Any = Exn.Fail
-  ) :~ values(ssl.Port.Input, ssl.Port.Output)
+  ) :: values(ssl.Port.Input, ssl.Port.Output)
 
   enum ssl.Port.Mode
   | connect
@@ -182,7 +182,7 @@ provided by the operating system.
 }
 
 @doc(
-  method (port :: ssl.Port).selected_alpn() :~ maybe(Bytes)
+  method (port :: ssl.Port).selected_alpn() :: maybe(Bytes)
 
 ){
 
@@ -216,7 +216,7 @@ provided by the operating system.
     ~port: port :: network.PortNumber,
     ~context: context :: ssl.Context.Client = ssl.Context.Client(),
     ~alpn_protcols: alpn_protocols :: List.of(Bytes) = []
-  ) :~ values(ssl.Port.Input, ss.Port.Output)
+  ) :: values(ssl.Port.Input, ss.Port.Output)
 ){
 
  Connects to @rhombus(host) at @rhombus(port), similiar to (and building
@@ -249,7 +249,7 @@ provided by the operating system.
       ~context: context :: ssl.Context.Server = ssl.Context.Server(),
       ~reuse: reuse :: Any = #false,
       ~max_allow_wait: max_allow_wait :: Nat = 5,
-    ) :~ ssl.Listener
+    ) :: ssl.Listener
 ){
 
  Implements an SSL server through an underlying TCP listener.
@@ -283,7 +283,7 @@ provided by the operating system.
     ~context: context :: ssl.Context.Server = ssl.Context.Server(),
     ~reuse: reuse :: Any = #false,
     ~max_allow_wait: max_allow_wait :: Nat = 5,
-  ) :~ ssl.Listener
+  ) :: ssl.Listener
 ){
 
   Analogous to @rhombus(network.TCP.listen), equivalent to constructing

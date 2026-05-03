@@ -204,7 +204,7 @@
 
 @doc(
   fun error.reindent(
-    s :~ String,
+    s :: String,
     ~space: space :: String = " ",
     ~tab: tab :: String = "   ",
     ~label: label :: String = "",

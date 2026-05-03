@@ -90,7 +90,7 @@
 
 
 @doc(
-  fun make_builtin_flags(help :: Map -> Map) :~ List.of(Content)
+  fun make_builtin_flags(help :: Map -> Map) :: List.of(Content)
 ){
 
  Returns a list of @rhombus(Content) corresponding to flags that are

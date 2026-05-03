@@ -88,7 +88,7 @@
                   && List.of(List.of(Cell))) = []
   ) :: Table
   property (t :: Table).style :: Style
-  property (t :: Table).blockss :~ PairList.of(PairList.of(FlowBlock))
+  property (t :: Table).blockss :: PairList.of(PairList.of(FlowBlock))
 ){
 
  Represents a @tech{table}. Normally, a table is created with

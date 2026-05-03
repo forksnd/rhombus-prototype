@@ -102,7 +102,7 @@
   fun finalize.deallocator(
     get_arg :: Function.of_arity(1) = PairList.first,
     ~merely_uninterruptible: merely_uninterruptible :: Any.to_boolean = #false
-  ) :~ Function.assume_of((proc :: Function) -> Any.like(proc))
+  ) :: Function.assume_of((proc :: Function) -> Any.like(proc))
 ){
 
  Returns a function @rhombus(make_deallocator, ~var). The generated

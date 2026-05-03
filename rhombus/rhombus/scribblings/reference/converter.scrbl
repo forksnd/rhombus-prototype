@@ -212,7 +212,7 @@ encodings.
 }
 
 @doc(
-  method (cvt :: bytes.Converter).end() :~ values(Bytes, Status)
+  method (cvt :: bytes.Converter).end() :: values(Bytes, Status)
 
   method (cvt :: bytes.Converter).end_to(
     ~dest: dest :: MutableBytes,

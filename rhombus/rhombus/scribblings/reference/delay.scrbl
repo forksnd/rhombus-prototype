@@ -102,7 +102,7 @@ produce the same result.
   method (dly :: Delay).evt(
     ~pool: pool :: maybe(thread.Thread.Pool || Any.of(#'own))
              = #false
-  ) :~ Evt
+  ) :: Evt
 ){
 
  Forces @rhombus(dly) in a fresh thread and returns a

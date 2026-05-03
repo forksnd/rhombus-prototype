@@ -77,7 +77,7 @@
 @doc(
   method (envvars :: envvar.EnvVars).get(
     name :: BytesEnvVarName
-  ) :~ maybe(ImmutableBytes)
+  ) :: maybe(ImmutableBytes)
   method (envvars :: envvar.EnvVars).set(
     name :: BytesEnvVarName,
     val :: maybe(BytesNoNull),

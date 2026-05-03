@@ -118,7 +118,7 @@ headers.
   ) :: Map.of(Bytes, Bytes)
 
   fun server.Cookie.header_to_map(
-    header :~ Bytes,
+    header :: Bytes,
     ~decode: decode :: (Bytes -> Any)
   ) :: Map
 ){

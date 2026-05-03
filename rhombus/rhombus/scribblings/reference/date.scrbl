@@ -601,7 +601,7 @@ absolute point in time as a date and time in a specific time zone.
 
 @doc(
   fun date.is_leap_year(year :: Int) :: Boolean
-  fun date.days_in_year(year :: Int) :~ Int.in(365 ..= 366)
+  fun date.days_in_year(year :: Int) :: Int.in(365 ..= 366)
 ){
 
  Reports whether a year is a leap year or whether it has 365 or 366
