@@ -101,7 +101,7 @@
      #:with static-infos (normalize-static-infos (extract-static-infos #'rhs))
      #:with lhs-impl::binding-impl #'(lhs-e.infoer-id static-infos lhs-e.data)
      #:with lhs-i::binding-info #'lhs-impl.info
-     #:with (lhs-extends ...) (for/list ([bind-uses (syntax->list #'(lhs-i.bind-uses ...))])
+     #:with (lhs-extends ...) (for/list ([bind-uses (in-list (syntax->list #'(lhs-i.bind-uses ...)))])
                                 (syntax-parse bind-uses
                                   [(_ ... [#:extends extends] . _) #'extends]
                                   [_ #'#f]))
@@ -142,8 +142,8 @@
                                 (extract-static-infos #'rhs))
      #:with (lhs-impl::binding-impl ...) #'((lhs-e.infoer-id static-infos lhs-e.data) ...)
      #:with (lhs-i::binding-info ...) #'(lhs-impl.info ...)
-     #:with ((lhs-extends ...) ...) (for/list ([bind-usess (syntax->list #'((lhs-i.bind-uses ...) ...))])
-                                      (for/list ([bind-uses (syntax->list bind-usess)])
+     #:with ((lhs-extends ...) ...) (for/list ([bind-usess (in-list (syntax->list #'((lhs-i.bind-uses ...) ...)))])
+                                      (for/list ([bind-uses (in-list (syntax->list bind-usess))])
                                         (syntax-parse bind-uses
                                           [(_ ... [#:extends extends] . _) #'extends]
                                           [_ #'#f])))

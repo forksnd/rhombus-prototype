@@ -229,7 +229,7 @@
   (define (forwarding-annotations main-ret-stx rets-stx)
     (syntax-parse main-ret-stx
       [()
-       (for/list ([ret (syntax->list rets-stx)])
+       (for/list ([ret (in-list (syntax->list rets-stx))])
          (syntax-parse ret
            #:datum-literals (group)
            [(op::annotate-op (~optional _::values-id-annot) (~and p (_::parens (~and g (group ret-seq ...)) ...)))
@@ -246,7 +246,7 @@
            [_
             #`((#f) () (#,ret))]))]
       [_
-       (for/list ([ret (syntax->list rets-stx)])
+       (for/list ([ret (in-list (syntax->list rets-stx))])
          #`(() #,ret ()))]))
 
   (define-syntax-class :method-options

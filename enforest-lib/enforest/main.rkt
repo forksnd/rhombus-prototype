@@ -133,7 +133,7 @@
      #:with (sc-arg ...) (syntax-parse #'form-class
                            [(_ sc-arg ...) #'(sc-arg ...)]
                            [_ #'()])
-     #:with (sc-arg-name ...) (for/list ([sc-arg (syntax->list #'(sc-arg ...))])
+     #:with (sc-arg-name ...) (for/list ([sc-arg (in-list (syntax->list #'(sc-arg ...)))])
                                 (syntax-parse sc-arg
                                   [(id:identifier default) #'id]
                                   [id:identifier #'id]))

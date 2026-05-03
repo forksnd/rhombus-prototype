@@ -385,8 +385,8 @@
                 #,@(indirect-get-function-static-infos)))
            (define static-infos
              #`((#%call-result (#:at_arities
-                                #,(for/list ([sis (syntax->list #'(a.static-infos ...))]
-                                             [arity (syntax->list #'(arity ...))])
+                                #,(for/list ([sis (in-list (syntax->list #'(a.static-infos ...)))]
+                                             [arity (in-list (syntax->list #'(arity ...)))])
                                     #:break (not (syntax-e arity))
                                     #`[#,arity
                                        #,(static-info-lookup sis #'#%call-result)])))

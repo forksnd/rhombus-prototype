@@ -29,10 +29,10 @@
        [(#:at_index #f)
         #'()]
        [(#:at_index #f (idx0 i-si0) (idx i-si) ...)
-        (for/fold ([si #'i-si0]) ([i-si (syntax->list #'(i-si ...))])
+        (for/fold ([si #'i-si0]) ([i-si (in-list (syntax->list #'(i-si ...)))])
           (static-infos-or si i-si))]
        [(#:at_index other-si (idx i-si) ...)
-        (for/fold ([si #'other-si]) ([i-si (syntax->list #'(i-si ...))])
+        (for/fold ([si #'other-si]) ([i-si (in-list (syntax->list #'(i-si ...)))])
           (static-infos-or si i-si))]
        [_ si])]))
 

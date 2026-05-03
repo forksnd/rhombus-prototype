@@ -337,7 +337,7 @@
     [(#:space ([space val-id] ...) . rule)
      (define spaces (for/hasheq ([space (in-list (syntax->list #'(space ...)))])
                       (syntax-e space)))
-     (for/treelist ([space (in-treelist rule->include-spaces #'rule)]
+     (for/treelist ([space (in-treelist (rule->include-spaces #'rule))]
                     #:unless (hash-ref spaces (syntax-e space) #f))
        space)]))
 

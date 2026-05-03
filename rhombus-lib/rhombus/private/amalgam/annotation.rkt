@@ -1509,7 +1509,7 @@
          (cond
            [(i . < . (length args))
             (define si (for/fold ([si (car (list-tail args i))])
-                                 ([new-si (list-tail args (add1 i))])
+                                 ([new-si (in-list (list-tail args (add1 i)))])
                          (static-infos-or si new-si)))
             (if (eq? (car v) 'splice)
                 #`((#%index-result #,si)
@@ -1530,7 +1530,7 @@
            (cond
              [(null? sis) #'()]
              [else (for/fold ([si (car sis)])
-                             ([new-si (cdr sis)])
+                             ([new-si (in-list (cdr sis))])
                      (static-infos-or si new-si))]))
          #`((#%sequence-element ((#%values (#,(indirect-get-keyword-static-infos)
                                             #,si))))

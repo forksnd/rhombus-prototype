@@ -356,7 +356,7 @@
   (define (check-args-for-unsafe stx args kw-ok?)
     (syntax-parse args
       [(_::parens arg ...)
-       (for ([arg (syntax->list #'(arg ...))])
+       (for ([arg (in-list (syntax->list #'(arg ...)))])
          (check-arg-for-unsafe stx arg kw-ok?))])))
 
 (define-syntax fun
