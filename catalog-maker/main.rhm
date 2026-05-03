@@ -1,0 +1,95 @@
+#lang rhombus/static/and_meta
+import:
+  rhombus/runtime_path
+  rhombus/cmdline
+  lib("raco/cross.rkt")
+  lib("pkg/dirs-catalog.rkt") as pkg
+  rhombus/version.Version
+
+def versions_to_support = ["9.0", "9.1"]
+
+def base_dir = "/tmp/catalog-maker"
+println("Output to " ++ base_dir)
+def local_catalog_dir = base_dir +/ "local-catalog"
+def local_no_ffi_catalog_dir = base_dir +/ "local-catalog-no-ffi"
+
+runtime_path.def make_rhm: "make.rhm"
+runtime_path.def parent: ".."
+
+def config:
+  cmdline.parse:
+    cmdline.flag "--fast"
+
+def local_packages:
+  for List (f in filesystem.files(parent)):
+    skip_when !filesystem.file_exists(parent +/ f +/ "info.rkt")
+    to_string(f)
+
+pkg.#{create-dirs-catalog}(
+  local_catalog_dir,
+  ~#{immediate?}: #true,
+  for PairList (p in local_packages):
+    parent +/ p
+)
+
+pkg.#{create-dirs-catalog}(
+  local_no_ffi_catalog_dir,
+  PairList[parent +/ "no-ffi"]
+)
+
+fun build_catalog(version):
+  let workspace_dir = base_dir +/ version
+  let addon_dir = base_dir +/ "addon"
+  let site_dir = base_dir +/ "site" +/ version
+  println("== Working in " +& workspace_dir)
+  filesystem.make_directory(workspace_dir, ~parents: #true)
+
+  fun run(~any = #true,
+          command, arg, ...):
+    cross.#{raco-cross}(
+      ~#{workspace-dir}: workspace_dir,
+      ~#{compile-any?}: any,
+      ~#{addon-dir}: addon_dir,
+      ~version: version,
+      ~command: command,
+      arg,
+      ...
+    )
+
+  // make sure any needed foreign libraries are installed at host
+  unless config.maybe[#'fast]
+  | run("pkg", "install", "--auto", "--skip-installed", "draw-lib",
+        ~any: #false)
+
+  block:
+    fun add(dir):
+      let o = Port.Output.open_string()
+      parameterize { Port.Output.current: o }:
+        run("pkg", "config", "catalogs")
+      let catalogs :~ List:
+        let i = Port.Input.open_string(o.get_string())
+        for List (_ in 0..):
+          let l = i.read_line()
+          break_when l is_a Port.EOF
+          l
+      unless to_string(local_catalog_dir) in catalogs
+      | parameterize { Port.Output.current: o }:
+          run("pkg", "config", "--set", "-i", "catalogs",
+              dir, & catalogs)
+    add(local_catalog_dir)
+    when (version :: Version) < ("9.2" :: Version)
+    | // adding second means tha it will be first in the list of catalogs
+      add(local_no_ffi_catalog_dir)
+
+  // install in machine-independent cross target
+  unless config.maybe[#'fast]
+  | run("pkg", "install", "-u", "--auto", "--skip-installed", & local_packages)
+    // In case we fixed something after a previous install
+    run("setup")
+
+  run("racket", make_rhm, site_dir,
+      & local_packages)
+
+for (vers in versions_to_support):
+  build_catalog(vers)
+
