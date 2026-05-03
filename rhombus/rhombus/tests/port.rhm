@@ -461,6 +461,15 @@ block:
   check s.next_location() ~is values(10, 101, 1001)
 
 block:
+  let s = Port.Input.open_string("hello")
+  s.locations_enabled(#true)
+  let (line, col, offset) = s.next_location()
+  check:
+    line!! < dynamic(1) ~is #false
+    col!! < dynamic(1) ~is #true
+    offset!! < dynamic(1) ~is #false
+
+block:
   let s = Port.Input.open_string("aλb\nc")
   let o1 = Port.Output.open_string()
   let o2 = Port.Output.open_string()

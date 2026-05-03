@@ -9,6 +9,20 @@ block:
     statinfo_meta.unpack_group(s)
     statinfo_meta.wrap(form, info)
     statinfo_meta.lookup(form, key)
+    statinfo_meta.find(s, key)
+    statinfo_meta.gather(form)
+    statinfo_meta.replace(form, s)
+    statinfo_meta.and(s, ...)
+    statinfo_meta.or(s, ...)
+    statinfo_meta.check_function_arity(arity, num, kws)
+    statinfo_meta.pack_call_result(infos)
+    statinfo_meta.unpack_call_result(s)
+    statinfo_meta.pack_dependent_result(id, data, [env])
+    statinfo_meta.unpack_dependent_result(s)
+    statinfo_meta.pack_index_result(s, infos)
+    statinfo_meta.unpack_index_result(s)
+    statinfo_meta.unpack_uniform_index_result(s)
+    statinfo_meta.unpack_index_result_at_index(s, key)
 
 namespace sub:
   export x
@@ -57,12 +71,89 @@ block:
     statinfo_meta.unpack_group(statinfo_meta.pack_group('((x, y)) ((z, w))'))
     ~matches '((x, y)) ((z, w))'
 
+block:
+  import:
+    meta -1: rhombus/meta open
+  use_static
+  let [[a1, s1], [a2, s2]]:
+    [[1, '((x, y))'], [2, '((z, w))']]
+      |> statinfo_meta.pack_call_result(_)
+      |> statinfo_meta.unpack_call_result(_)
+  check:
+    a1 < dynamic(2) ~is #true
+    a2 < dynamic(2) ~is #false
+  check:
+    s1.unwrap() |> Syntax.make(_) ~matches '((x, y))'
+    s2.unwrap() |> Syntax.make(_) ~matches '((z, w))'
+
+block:
+  import:
+    meta -1: rhombus/meta open
+  use_static
+  let (id, data, env) = statinfo_meta.pack_dependent_result(
+    'bridge',
+    '(a, b, c)',
+    {'x': '((x, y))', 'z': '((z, w))', 'hello': "world"}
+  ) |> statinfo_meta.unpack_dependent_result(_)
+  check:
+    id.unwrap() ~is #'bridge
+  check:
+    data.unwrap() |> Syntax.make(_) ~matches '(a, b, c)'
+  check:
+    (for Set ((k, _) in env): k.unwrap()) ~is {#'x, #'z, #'hello}
+    env['x'] ~matches '((x, y))'
+    env['z'] ~matches '((z, w))'
+    env['hello'] ~is "world"
+
+block:
+  import:
+    meta -1: rhombus/meta open
+  use_static
+  let packed = statinfo_meta.pack_index_result(
+    '((a, b))',
+    [[1, '((x, y))'], [2, '((z, w))']]
+  )
+  let (maybe_s, [[1, s1], [2, s2]]) = statinfo_meta.unpack_index_result(packed)
+  check:
+    maybe_s!!.unwrap() |> Syntax.make(_) ~matches '((a, b))'
+    s1.unwrap() |> Syntax.make(_) ~matches '((x, y))'
+    s2.unwrap() |> Syntax.make(_) ~matches '((z, w))'
+  let uniform = statinfo_meta.unpack_uniform_index_result(packed)
+  check:
+    uniform.unwrap() |> Syntax.make(_) ~matches '()'
+  check:
+    statinfo_meta.unpack_index_result_at_index(packed, 1).unwrap()
+      |> Syntax.make(_) ~matches '((x, y))'
+    statinfo_meta.unpack_index_result_at_index(packed, 2).unwrap()
+      |> Syntax.make(_) ~matches '((z, w))'
+    statinfo_meta.unpack_index_result_at_index(packed, 3).unwrap()
+      |> Syntax.make(_) ~matches '((a, b))'
+
+block:
+  import:
+    meta -1: rhombus/meta open
+  let packed = statinfo_meta.pack_index_result(#false, [])
+  let (maybe_s, []) = statinfo_meta.unpack_index_result(packed)
+  check maybe_s ~is #false
+  let default_si = statinfo_meta.unpack_index_result_at_index(packed, "no")
+  check default_si ~matches '()'
+
+block:
+  import:
+    meta -1: rhombus/meta open
+  let packed = statinfo_meta.pack_index_result('((a, b))', [])
+  let (maybe_s, []) = statinfo_meta.unpack_index_result(packed)
+  check maybe_s ~matches '((a, b))'
+  let default_si = statinfo_meta.unpack_index_result_at_index(packed, "no")
+  check default_si ~matches '((a, b))'
+
 check:
   import:
     meta -1: rhombus/meta open
   use_static
   statinfo_meta.function_arity_key.unwrap()
   statinfo_meta.call_result_key.unwrap()
+  statinfo_meta.dependent_result_key.unwrap()
   statinfo_meta.index_result_key.unwrap()
   statinfo_meta.index_get_key.unwrap()
   statinfo_meta.index_set_key.unwrap()
@@ -78,6 +169,7 @@ check:
   statinfo_meta.fixnum_key.unwrap()
   statinfo_meta.values_key.unwrap()
   statinfo_meta.indirect_key.unwrap()
+  statinfo_meta.never_key.unwrap()
   ~completes
 
 block:

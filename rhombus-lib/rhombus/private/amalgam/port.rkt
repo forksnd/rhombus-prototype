@@ -34,7 +34,8 @@
          (submod "sequenceable.rkt" for-static-info)
          "printer-property.rkt"
          "path-string.rkt"
-         "realm.rkt")
+         "realm.rkt"
+         "number.rkt")
 
 (provide (for-spaces (rhombus/annot
                       rhombus/namespace)
@@ -475,6 +476,11 @@
 
 (define/method Port.next_location
   #:primitive (port-next-location)
+  #:static-infos ((#%call-result (#:at_arities
+                                  ((2 ((#%values (((#%maybe #,(get-int-static-infos)))
+                                                  ((#%maybe #,(get-int-static-infos)))
+                                                  ((#%maybe #,(get-int-static-infos)))))))
+                                   (16 ())))))
   (case-lambda
     [(p) (port-next-location p)]
     [(p line col offset)

@@ -67,7 +67,8 @@
 (define/arity Box.value
   #:primitive (unbox set-box!)
   #:static-infos ((#%call-result (#:at_arities
-                                  ([2 ((#%dependent-result (select-value value)))]))))
+                                  ((2 ((#%dependent-result (select-value value))))
+                                   (4 ())))))
   (case-lambda
     [(b) (unbox b)]
     [(b v) (set-box! b v)]))

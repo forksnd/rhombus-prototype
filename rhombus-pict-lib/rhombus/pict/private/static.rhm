@@ -1479,7 +1479,7 @@ class Find(private q :~ Pict, private find, private t_find_or_dt, private is_ani
           is_animated)
 
   method in(p :: Pict, epoch :: Int = 0, n :: Real.in(0, 1) = 0,
-            ~nth: nth :: Nat || matching(#'unique) = #'unique):
+            ~nth: nth :: Nat || matching(#'unique) = #'unique) :~ values(Real, Real):
     let (x, y) = find(p, q, epoch, n, nth)
     if x
     | values(x, y)
@@ -1491,7 +1491,7 @@ class Find(private q :~ Pict, private find, private t_find_or_dt, private is_ani
             error.val(~label: "in pict", p))
 
   method maybe_in(p :: Pict, epoch :: Int = 0, n :: Real.in(0, 1) = 0,
-                  ~nth: nth :: Nat || matching(#'unique) = #'unique):
+                  ~nth: nth :: Nat || matching(#'unique) = #'unique) :~ values(maybe(Real), maybe(Real)):
     let (x, y) = find(p, q, epoch, n, nth)
     if x
     | values(x, y)

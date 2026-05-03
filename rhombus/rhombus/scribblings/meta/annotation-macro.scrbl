@@ -2,7 +2,9 @@
 @(import:
     "common.rhm" open
     "nonterminal.rhm" open
-    "macro.rhm")
+    "macro.rhm"
+    meta_label:
+      rhombus/syntax_map open)
 
 @(def macro_eval = macro.make_macro_eval())
 

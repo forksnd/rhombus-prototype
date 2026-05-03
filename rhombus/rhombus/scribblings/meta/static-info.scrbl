@@ -2,7 +2,9 @@
 @(import:
     "common.rhm" open
     "nonterminal.rhm" open
-    "macro.rhm")
+    "macro.rhm"
+    meta_label:
+      rhombus/syntax_map open)
 
 @(def statinfo_key_defn = @rhombus(statinfo.key, ~defn))
 
@@ -129,7 +131,7 @@
                                       ...])
     :: Syntax
   fun statinfo_meta.unpack_call_result(call_stx :: Syntax)
-    :: matching([[_ :: Int, _ :: Syntax], ...])
+    :: [[Int, Syntax], ...]
 ){
 
  Analogous to @rhombus(statinfo_meta.pack) and
@@ -161,7 +163,9 @@
     env :: Map.of(Identifier, Any) = {}
   ) :: Syntax
   fun statinfo_meta.unpack_dependent_result(dep_stx :: Syntax)
-    :: values(Identifier, Syntax, Map.of(Identifier, Any))
+    :: values(Identifier,
+              Syntax,
+              Map.by(equal_name_and_scopes).of(Identifier, Any))
 ){
 
  Analogous to @rhombus(statinfo_meta.pack) and
@@ -197,13 +201,14 @@
     [[key :: Any, statinfo_stx :: Syntax],
      ...]
   ) :: Syntax
-  fun statinfo_meta.unpack_index_result(call_stx :: Syntax)
-    :: values(maybe(Syntax), [[Any, Syntax], ...])
+  fun statinfo_meta.unpack_index_result(
+    index_stx :: Syntax
+  ) :: values(maybe(Syntax), [[Any, Syntax], ...])
   fun statinfo_meta.unpack_uniform_index_result(
-    call_stx :: Syntax
+    index_stx :: Syntax
   ) :: Syntax
   fun statinfo_meta.unpack_index_result_at_index(
-    call_stx :: Syntax,
+    index_stx :: Syntax,
     key :: Any
   ) :: Syntax
 ){
@@ -256,18 +261,20 @@
 }
 
 @doc(
-  fun statinfo_meta.gather(expr_stx :: Syntax) :: Syntax
-  fun statinfo_meta.replace(expr_stx :: Syntax, statinfo_stx :: Syntax)
+  fun statinfo_meta.gather(expr_stx :: Syntax)
+    :: Syntax
+  fun statinfo_meta.replace(expr_stx :: Syntax,
+                            statinfo_stx :: Syntax)
     :: Syntax
 ){
 
  Returns or replaces all of the static information of @rhombus(expr_stx)
  in unpacked form. The result of @rhombus(statinfo_meta.gather) can be
  used with @rhombus(statinfo_meta.find) to get the same values as using
- @rhombus(statinfo_meta.lookup) on @rhombus(expr_str). The result of
+ @rhombus(statinfo_meta.lookup) on @rhombus(expr_stx). The result of
  @rhombus(fun statinfo_meta.replace) is the same expression as
- @rhombus(expr_str), but removing any static information that is directly
- attached to @rhombus(expr_str) and replacing it with
+ @rhombus(expr_stx), but removing any static information that is directly
+ attached to @rhombus(expr_stx) and replacing it with
  @rhombus(statinfo_stx).
 
 }

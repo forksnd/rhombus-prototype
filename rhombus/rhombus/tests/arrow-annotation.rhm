@@ -766,3 +766,36 @@ block:
   check (g || f(0))()[0] ~is Char"x"
   check (g || adjust(f)(0))()[0] ~is Char"x"
   check (g || fx)()[0] ~throws "no"
+
+// check merging of multi-case result info
+block:
+  use_static
+
+  def f :: Function.all_of(
+    () -> String,
+    (Any) -> Any
+  ) && Function.all_of(
+    () -> Any,
+    (Any) -> String
+  ) = fun
+  | (): "zero"
+  | (_): "one"
+
+  check f().length() ~is 4
+  check f(#false).length() ~is 3
+
+block:
+  use_static
+
+  def f :: Function.all_of(
+    () -> String,
+    (Any) -> String
+  ) || Function.all_of(
+    () -> Never,
+    (Any) -> Never
+  ) = fun
+  | (): "zero"
+  | (_): "one"
+
+  check f().length() ~is 4
+  check f(#false).length() ~is 3

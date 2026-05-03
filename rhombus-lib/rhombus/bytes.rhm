@@ -65,7 +65,7 @@ class Converter(private _handle):
     ~dest: dest :: MutableBytes,
     ~dest_start: dest_start :: Nat = 0,
     ~dest_end: dest_end :: Nat = dest.length()
-  ) :: values(Nat, Status):
+  ) :~ values(Nat, Status):
     ~who: who
     local_error_adjust { #'#{bytes-convert-end}: who }:
       rkt.#{bytes-convert-end}(handle,

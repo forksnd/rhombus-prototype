@@ -12,7 +12,7 @@
 The @rhombusmodname(rhombus/bytes) module supports conversions between
 string encodings at the byte-string level. A @rhombus(bytes.Converter)
 object maintains conversion state, and it its
-@rhombus(bytes.Converter.convert) method comverts from one encoding to
+@rhombus(bytes.Converter.convert) method converts from one encoding to
 another. The set of available encodings and combinations varies by
 platform, depending on available system libraries such as @tt{iconv}.
 
@@ -212,7 +212,8 @@ encodings.
 }
 
 @doc(
-  method (cvt :: bytes.Converter).end() :: values(Bytes, Status)
+  method (cvt :: bytes.Converter).end()
+    :: values(Bytes, Status)
 
   method (cvt :: bytes.Converter).end_to(
     ~dest: dest :: MutableBytes,

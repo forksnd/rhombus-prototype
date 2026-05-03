@@ -1191,7 +1191,8 @@
 (define/method Map.get
   #:primitive (hash-ref)
   #:static-infos ((#%call-result (#:at_arities
-                                  ([4 ((#%dependent-result (select-key-or-value (value result))))]))))
+                                  ((4 ((#%dependent-result (select-key-or-value (value result)))))
+                                   (8 ())))))
   (case-lambda
     [(ht key) (hash-ref ht key)]
     [(ht key default) (hash-ref ht key default)]))

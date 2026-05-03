@@ -422,29 +422,29 @@
 (define-for-syntax (static-infos-result-and as bs)
   ;; With `#:at_arities`, for now, we handle only the simple case that the masks coincide
   (syntax-parse as
-    [(#:at_arities (a-mask a-results) ...)
+    [(#:at_arities ((a-mask a-results) ...))
      (syntax-parse bs
-       [(#:at_arities (b-mask b-results) ...)
+       [(#:at_arities ((b-mask b-results) ...))
         (if (equal? (syntax->datum #'(a-mask ...)) (syntax->datum #'(b-mask ...)))
             #`(#:at_arities #,(for/list ([a-mask (in-list (syntax->list #'(a-mask ...)))]
                                          [a-results (in-list (syntax->list #'(a-results ...)))]
                                          [b-results (in-list (syntax->list #'(b-results ...)))])
-                                #`(,a-mask #,(static-infos-maybe-dependent-result-and a-results b-results))))
+                                #`(#,a-mask #,(static-infos-maybe-dependent-result-and a-results b-results))))
             as)]
        [_
         as])]
     [_
      (syntax-parse bs
-       [(#:at_arities (b-mask b-results) ...)
+       [(#:at_arities ((b-mask b-results) ...))
         as]
        [_ (static-infos-maybe-dependent-result-and as bs)])]))
 
 (define-for-syntax (static-infos-result-or as bs)
   ;; With `#:at_arities`, for now, we handle only the simple case that the masks coincide
   (syntax-parse as
-    [(#:at_arities (a-mask a-results) ...)
+    [(#:at_arities ((a-mask a-results) ...))
      (syntax-parse bs
-       [(#:at_arities (b-mask b-results) ...)
+       [(#:at_arities ((b-mask b-results) ...))
         (if (equal? (syntax->datum #'(a-mask ...)) (syntax->datum #'(b-mask ...)))
             #`(#:at_arities #,(for/list ([a-mask (in-list (syntax->list #'(a-mask ...)))]
                                          [a-results (in-list (syntax->list #'(a-results ...)))]
@@ -455,7 +455,7 @@
         #f])]
     [_
      (syntax-parse bs
-       [(#:at_arities (b-mask b-results) ...)
+       [(#:at_arities ((b-mask b-results) ...))
         #f]
        [_ (static-infos-maybe-dependent-result-or as bs)])]))
 
