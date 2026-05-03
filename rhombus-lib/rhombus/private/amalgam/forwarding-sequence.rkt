@@ -198,7 +198,7 @@
              (syntax-parse #'saved
                [(add-ctx remove-ctx)
                 #`(sequence [state base-ctx add-ctx remove-ctx all-ctx stx-params #f ex-id] . forms)]
-               [else
+               [_
                 (raise-syntax-error #f "bad binding-mode nesting")])]
             [(_ #:suspend sub-form ...)
              ;; Used by expansion of `def` to turn off `let` mode, needed when a binder
@@ -241,7 +241,7 @@
                [(ex-id . saved)
                 #`(sequence [state base-ctx add-ctx remove-ctx all-ctx stx-params saved ex-id]
                             . forms)]
-               [else
+               [_
                 (raise-syntax-error #f "bad export-mode nesting")])])]
          [(define-syntax-parameter key rhs)
           (with-syntax ([stx-params (syntax-parameter-update #'key #'rhs #'stx-params)]
@@ -333,7 +333,7 @@
           (define next
             #`(sequence [new-state base-ctx add-ctx remove-ctx all-ctx stx-params saved ex-id] #,@provides . forms))
           (syntax-parse #'new-state
-            [((~or #:block #:blocklet #:block-stop-at) . _)
+            [((~or* #:block #:blocklet #:block-stop-at) . _)
              (for ([req (in-list reqs)])
                ;; unlike normal `require`, `syntax-local-lift-require` doesn't remove
                ;; use-site scopes, so we have to do that ourselves here
@@ -422,7 +422,7 @@
      (raise-syntax-error #f
                          "allowed only in modules and namespaces"
                          #'new-ex-id)]
-    [else
+    [_
      (raise-syntax-error #f
                          "should not get expanded"
                          stx)]))

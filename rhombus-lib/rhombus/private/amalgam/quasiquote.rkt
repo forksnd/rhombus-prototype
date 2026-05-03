@@ -121,7 +121,7 @@
     (syntax-parse ps
       #:literals (...1)
       [(a ...1 . tail)
-       #`((~and (~or (~seq _) (~seq)) (~seq a (... ...)))
+       #`((~and (~or* (~seq _) (~seq)) (~seq a (... ...)))
           . #,(replace-...1 #'tail))]
       [(a . tail)
        (define old-t #'tail)
@@ -621,7 +621,7 @@
                     (syntax-parse e
                       [_::_-bind
                        (values #'_ null null null)]
-                      [else
+                      [_
                        (let ([temp0-id (car (generate-temporaries (list e)))]
                              [temp-id (car (generate-temporaries (list e)))])
                          (values temp0-id
@@ -1097,7 +1097,7 @@
        [(and (identifier? unpack*-id)
              (free-identifier=? unpack*-id #'unpack-multi-tail*))
         (get-tail-repetition #'$-name base-e (sub1 (syntax-e #'depth))
-                             #'unpack-multi-tail-list* #'unpack-multi-tail* #'unpack-multi-list-tail*                             
+                             #'unpack-multi-tail-list* #'unpack-multi-tail* #'unpack-multi-list-tail*
                              #'rep-info)]
        [else
         ;; strip away redundant unpack as an optimization

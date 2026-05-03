@@ -139,7 +139,7 @@
                       (~optional (group #:nonterminal (block
                                                        (group nt-id (block nt-id-key-g))
                                                        ...)))
-                      (~optional (group (~and meta-tag (~or #:meta #:also_meta)))))
+                      (~optional (group (~and meta-tag (~or* #:meta #:also_meta)))))
                 ...
                 (~seq ((~and group-tag group) form ...) ...)
                 (group

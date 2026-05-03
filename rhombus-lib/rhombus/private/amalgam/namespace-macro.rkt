@@ -133,8 +133,8 @@
                              (~optional (group #:parse_clause ~! parse::rhs))
                              (~optional (group #:init ~! init-data::quoted-rhs))
                              (~optional (group #:complete ~! complete::rhs))
-                             (~optional (group #:name ~! (~or (~seq name::dotted-identifier-sequence)
-                                                              (~seq (_::block (group name::dotted-identifier-sequence))))))
+                             (~optional (group #:name ~! (~or* (~seq name::dotted-identifier-sequence)
+                                                               (~seq (_::block (group name::dotted-identifier-sequence))))))
                              (~optional (group (~and defer-tail #:defer_tail) ~!)
                                         #:defaults ([defer-tail #'#f]))
                              (~optional (group (~and no-exports #:no_exports) ~!)
@@ -192,9 +192,10 @@
       [(_ (~and state ([defer-tail #:no_exports . _] _)) form . rest)
        #:when (nestable-declaration? #'form)
        (syntax-parse #'form
+         #:datum-literals (group)
          [(group (~literal sentinel_declaration))
           #'(namespace-body-step state . rest)]
-         [else
+         [_
           (raise-syntax-error #f
                               "nestable declarations not allowed in this context"
                               (respan #'form))])]

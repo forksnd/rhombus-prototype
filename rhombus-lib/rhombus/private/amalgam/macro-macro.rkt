@@ -146,8 +146,8 @@
     #:with order-name
     (if (attribute order-tail)
         (syntax-parse #'order-tail
-          [((~or order::dotted-identifier-sequence
-                 (_::block (group order::dotted-identifier-sequence))))
+          [((~or* order::dotted-identifier-sequence
+                  (_::block (group order::dotted-identifier-sequence))))
            #:with (~var h-order (:hier-name-seq in-name-root-space in-order-space name-path-op name-root-ref)) #'order
            #`(h-order.name)])
         #'()))
@@ -638,8 +638,8 @@
   (syntax-parse stx
     #:literals (syntax)
     [(_ id
-        (~or only-space
-             (~seq #:multi (one-space ...)))
+        (~or* only-space
+              (~seq #:multi (one-space ...)))
         (~optional (~seq #:extra ([extra-kw extra-get-static-infos extra-shape] ...))
                    #:defaults ([(extra-kw 1) '()]
                                [(extra-get-static-infos 1) '()]

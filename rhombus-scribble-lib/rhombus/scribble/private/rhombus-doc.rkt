@@ -300,7 +300,7 @@
      (hash key #'id)]
     [((~var id (identifier-target 'rhombus/annot)))
      (hash key (target->dotted-identifier (attribute id.name) (attribute id.sym)))]
-    [(t ... (op |.|) (~or of now_of later_of assume_of) . _) ; FIXME: hardwired constructors
+    [(t ... (op |.|) (~or* of now_of later_of assume_of) . _) ; FIXME: hardwired constructors
      #:with ((~var id (identifier-target 'rhombus/annot))) #'(t ...)
      (hash key (target->dotted-identifier (attribute id.name) (attribute id.sym)))]
     [_
@@ -1003,9 +1003,9 @@
   (cons
    (syntax-parse stx
      #:datum-literals (group block implements extends)
-     [(group _ ... (block _ ... (group (~or implements extends) (~var id (identifier-target 'rhombus/annot))) _ ...))
+     [(group _ ... (block _ ... (group (~or* implements extends) (~var id (identifier-target 'rhombus/annot))) _ ...))
       (hash 'method_fallback (target->dotted-identifier (attribute id.name) (attribute id.sym)))]
-     [(group _ ... (block _ ... (group (~or implements extends) (block (group (~var id (identifier-target 'rhombus/annot))))) _ ...))
+     [(group _ ... (block _ ... (group (~or* implements extends) (block (group (~var id (identifier-target 'rhombus/annot))))) _ ...))
       (hash 'method_fallback (target->dotted-identifier (attribute id.name) (attribute id.sym)))]
      [_ #f])
    (map (lambda (s) #f) (cdr space-names))))

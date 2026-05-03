@@ -1454,9 +1454,9 @@
                                      #,@(cdr args))
                                   make-rest-selector
                                   #f #f)])]
-            [(group op::...-bind (~or (~seq)
-                                      (~seq (~and nonempty #:nonempty))
-                                      (~seq (~and once #:once))))
+            [(group op::...-bind (~or* (~seq)
+                                       (~seq (~and nonempty #:nonempty))
+                                       (~seq (~and once #:once))))
              #:when (pair? accum)
              (define rep-min (if (attribute nonempty) 1 0))
              (define rep-max (if (attribute once) 1 #f))

@@ -324,8 +324,8 @@
         [(except-out starting-e exclude-e ...)
          (define all-except-ht (loop #'(combine-out exclude-e ...) except-ht #hasheq() spaces spaces-mode))
          (loop #'starting-e ht all-except-ht spaces spaces-mode)]
-        [(~or (only-meta-out ex phase ...)
-              (except-meta-out ex phase ...))
+        [(~or* (only-meta-out ex phase ...)
+               (except-meta-out ex phase ...))
          (raise-syntax-error #f
                              "phase-limiting export not supported in a namespace context"
                              #'mod-path)]

@@ -233,8 +233,8 @@
      (syntax-parse stx
        #:datum-literals (group)
        [(form-id (b-tag::block
-                  (~alt (~optional (group #:effect ~! (~or (_::block (group effect-id:identifier))
-                                                           effect-id:identifier)))
+                  (~alt (~optional (group #:effect ~! (~or* (_::block (group effect-id:identifier))
+                                                            effect-id:identifier)))
                         (~optional (group (~and #:no_additional_submodules no-submod) ~!)))
                   ...
                   . content))

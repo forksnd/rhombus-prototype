@@ -307,7 +307,7 @@
                                                                           (root-swap (rhombus-syntax-class-attributes rsc)))))
                #'tail)]
              [else (bad)])]
-          [else (bad)])]))))
+          [_ (bad)])]))))
 
 (define-for-syntax (normalize-pvar-statinfos pvar-sis)
   (if (eq? pvar-sis 'stx)

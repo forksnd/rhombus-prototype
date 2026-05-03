@@ -158,7 +158,7 @@
    (lambda (stx)
      (syntax-parse stx
        #:datum-literals (group)
-       [(form-id left ...+ (~and kw (~or #:like #:like_inner)) right ...+)
+       [(form-id left ...+ (~and kw (~or* #:like #:like_inner)) right ...+)
         #:with left-r::repetition #'(group left ...)
         #:with (~var right-r (:prefix-op+repetition-use+tail (quote-syntax deepen))) #'(group right ...)
         #:with left-i::repetition-info #'left-r.parsed

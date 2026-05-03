@@ -36,8 +36,8 @@
   (define-syntax-class :maybe-ends-each
     #:attributes (each red-parsed)
     #:datum-literals (group)
-    (pattern ((_::parens (~and g (~or (group bind ...+ _::in _ ...+)
-                                      (group bind ...+ (_::block . _))))
+    (pattern ((_::parens (~and g (~or* (group bind ...+ _::in _ ...+)
+                                       (group bind ...+ (_::block . _))))
                          ...))
              #:with each #`(#,group-tag each (block g ...))
              #:attr red-parsed #f)
@@ -48,8 +48,8 @@
              #:with (~var redr (:infix-op+reducer+tail #'#%call)) (no-srcloc #`(#,group-tag red ...))
              #:attr each (syntax-parse #'redr.tail
                            #:datum-literals (group)
-                           [((_::parens (~and g (~or (group bind ...+ _::in _ ...+)
-                                                     (group bind ...+ (_::block . _))))
+                           [((_::parens (~and g (~or* (group bind ...+ _::in _ ...+)
+                                                      (group bind ...+ (_::block . _))))
                                         ...))
                             (no-srcloc #`(#,group-tag each (block g ...)))]
                            [()

@@ -89,7 +89,7 @@
            (syntax-parse (unwrap-clause #'cl.parsed)
              [(kw id #t . rest)
               (wrap-clause #'(kw id #f . rest))])])]
-       [else
+       [_
         (raise-syntax-error #f
                             "expected macro definer, bridge definer, or namespace clause to make private"
                             stx)]))))

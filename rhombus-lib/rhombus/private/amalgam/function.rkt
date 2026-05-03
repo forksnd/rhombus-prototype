@@ -670,7 +670,7 @@
    (for/list ([rhs (in-list (syntax->list rhss-stx))])
      (syntax-parse rhs
        #:datum-literals (group)
-       [(tag::block (~or (group #:who . _) (group #:unsafe . _)) ...+ body ...)
+       [(tag::block (~or* (group #:who . _) (group #:unsafe . _)) ...+ body ...)
         #'(tag body ...)]
        [_ rhs]))))
 

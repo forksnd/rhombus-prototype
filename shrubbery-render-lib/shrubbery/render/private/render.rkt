@@ -1055,7 +1055,7 @@
 (define (term-ctx stx)
   (syntax-parse stx
     #:datum-literals (parens brackets braces quotes block alts op)
-    [((~and head (~or parens brackets braces quotes block alts op)) . _)
+    [((~and head (~or* parens brackets braces quotes block alts op)) . _)
      #'head]
     [else stx]))
 

@@ -1131,7 +1131,7 @@
     [c::annotation-predicate-form
      (and (identifier? #'c.predicate)
           (free-identifier=? #'c.predicate #'always-satisfied))]
-    [else #f]))
+    [_ #f]))
 
 (define-name-root Any
   #:fields

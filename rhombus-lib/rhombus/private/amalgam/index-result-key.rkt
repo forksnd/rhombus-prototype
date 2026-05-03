@@ -34,7 +34,7 @@
        [(#:at_index other-si (idx i-si) ...)
         (for/fold ([si #'other-si]) ([i-si (syntax->list #'(i-si ...))])
           (static-infos-or si i-si))]
-       [else si])]))
+       [_ si])]))
 
 (define-for-syntax (extract-index-result si key)
   (cond
@@ -49,7 +49,7 @@
             (if (syntax-e #'other-si)
                 #'other-si
                 #'()))]
-       [else si])]))
+       [_ si])]))
 
 (define-for-syntax (parse-index-results si)
   (syntax-parse si
@@ -65,7 +65,7 @@
   (syntax-parse si
     [(#:at_index other-si i-case ...)
      #`(#:at_index other-si (#,i #,i-isi) i-case ...)]
-    [else
+    [_
      #`(#:at_index #,si (#,i #,i-isi))]))
 
 (define-for-syntax (or-index-results a b)

@@ -113,7 +113,7 @@
            (syntax-parse (unwrap-clause #'cl.parsed)
              [(kw id #t . rest)
               (wrap-clause #'(kw id #f . rest))])])]
-       [else
+       [_
         (raise-syntax-error #f
                             "expected enforest syntax class, reflection, predicate, packer, or unpacker clause to make private"
                             stx)]))))

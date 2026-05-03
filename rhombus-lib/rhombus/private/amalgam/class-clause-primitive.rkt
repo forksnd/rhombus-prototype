@@ -581,8 +581,8 @@
        [(form-id) (wrap-class-clause
                    #`(#:serializable form-id 0 #f #f #f #f))]
        [(form-id (_::block (~alt
-                            (~optional (~or (group #:version (_::block (group version)))
-                                            (group #:version version))
+                            (~optional (~or* (group #:version (_::block (group version)))
+                                             (group #:version version))
                                        #:defaults ([version #'0]))
                             (~optional (group #:serialize (~and (_::block . _) s-rhs))
                                        #:defaults ([s-rhs #'#f]))
