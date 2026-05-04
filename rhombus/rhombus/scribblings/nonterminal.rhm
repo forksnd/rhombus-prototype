@@ -22,7 +22,7 @@ export:
   id_or_op
   id_name
   op_name
-  op_or_id_name
+  id_or_op_name
   keyword
   pattern
   template
@@ -46,7 +46,7 @@ manual.nonterminal:
   id_or_op: block
   id_name: namespace ~defn
   op_name: namespace ~defn
-  op_or_id_name: namespace ~defn
+  id_or_op_name: namespace ~defn
   keyword: block
   pattern: #%quotes
   template: #%quotes

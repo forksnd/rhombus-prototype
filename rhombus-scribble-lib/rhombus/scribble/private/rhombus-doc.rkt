@@ -29,6 +29,7 @@
                     space_meta_clause)
          (for-space rhombus/doc
                     grammar
+                    grammar_case
                     non_target
                     operator_order))
 
@@ -1176,6 +1177,30 @@
                                          #:at g
                                          #:pattern? #t
                                          #:options #'(parens (group #:inset (block (group (parsed #:rhombus/expr #f))))))])))])))))
+
+(define-doc-syntax grammar_case
+  (make-doc-transformer
+   #:extract-desc (lambda (stx)
+                    (syntax-parse stx
+                      [(group _ desc . _)
+                       (syntax-e #'desc)]))
+   #:extract-space-sym (lambda (stx) 'grammar)
+   #:extract-name (lambda (stx space-name) #f)
+   #:extract-metavariables
+   (lambda (stx space-name vars)
+     (syntax-parse stx
+       #:datum-literals (group)
+       [(group _ id pat)
+        (extract-pattern-metavariables #'(group pat) vars)]))
+   #:extract-typeset
+   (lambda (stx space-name subst)
+     (let retry ([stx stx])
+       (syntax-parse stx
+         #:datum-literals (group alts block)
+         [(group grammar id (block (~and g (group t ...))))
+          (rb #'(group t ...)
+              #:at #'g
+              #:pattern? #t)])))))
 
 (define-doc-syntax non_target
   (let ()

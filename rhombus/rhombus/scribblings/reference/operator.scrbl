@@ -16,18 +16,18 @@
   defn.macro 'operator
               | $op_case
               | ...'
-  defn.macro 'operator $op_or_id_name $maybe_res_annot:
+  defn.macro 'operator $id_or_op_name $maybe_res_annot:
                 $option; ...
               | $op_case
               | ...'
 
   grammar op_case
-  | $op_or_id_name $bind_term $impl_block
-  | $bind_term $op_or_id_name $bind_term $impl_block
-  | $bind_term $op_or_id_name $impl_block
-  | ($op_or_id_name $bind_term) $maybe_res_annot $impl_block
-  | ($bind_term $op_or_id_name $bind_term) $maybe_res_annot $impl_block
-  | ($bind_term $op_or_id_name) $maybe_res_annot $impl_block
+  | $id_or_op_name $bind_term $impl_block
+  | $bind_term $id_or_op_name $bind_term $impl_block
+  | $bind_term $id_or_op_name $impl_block
+  | ($id_or_op_name $bind_term) $maybe_res_annot $impl_block
+  | ($bind_term $id_or_op_name $bind_term) $maybe_res_annot $impl_block
+  | ($bind_term $id_or_op_name) $maybe_res_annot $impl_block
 
   grammar impl_block
   | :
@@ -54,8 +54,8 @@
   | ~same_on_right_as: $other ...; ...
   | ~associativity $assoc
   | ~associativity: $assoc
-  | ~name $op_or_id_name
-  | ~name: $op_or_id_name
+  | ~name $id_or_op_name
+  | ~name: $id_or_op_name
   | ~who $id
   | ~who: $id
 
@@ -73,7 +73,7 @@
   | $bind
 ){
 
- Binds @rhombus(op_or_id_name) as a operator, either
+ Binds @rhombus(id_or_op_name) as a operator, either
  prefix, infix, postfix, or a combination.
 
  The operator is function-like in the sense that it receives argument

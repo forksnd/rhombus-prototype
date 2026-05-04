@@ -11,7 +11,7 @@
     equals_func_expr: block expr
     hash_code_func_expr: block expr
 
-  defn.macro '«key_comp.def '$op_or_id_name':
+  defn.macro '«key_comp.def '$id_or_op_name':
                  $ref_by_clause
                  ...
                  »'
@@ -20,7 +20,7 @@
   | ~hash_code: $hash_code_func_expr
 ){
 
- Defines @rhombus(op_or_id_name) as a @deftech{map configuration} like
+ Defines @rhombus(id_or_op_name) as a @deftech{map configuration} like
  @rhombus(===, ~key_comp) and for use with forms like @rhombus(Map.by)
  and @rhombus(Set.by).
 

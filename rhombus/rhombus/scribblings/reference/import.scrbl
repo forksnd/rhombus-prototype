@@ -312,20 +312,20 @@
 @doc(
   ~nonterminal:
     rename_as: rename ~impo
-  impo.modifier 'expose $id_or_rename_as'
+  impo.modifier 'expose $id_or_op_or_rename_as'
   impo.modifier 'expose:
-                   $id_or_rename_as
+                   $id_or_op_or_rename_as
                    ...'
-  grammar id_or_rename_as
-  | $id
+  grammar id_or_op_or_rename_as
+  | $id_or_op
   | $rename_as
 ){
 
  Modifies an @rhombus(import) clause so that the listed
- @rhombus(id)s are imported without a prefix. The exposed
+ @rhombus(id_or_op)s are imported without a prefix. The exposed
  ids remain accessible though the import's prefix, too.
 
- If @rhombus(as, ~impo) is used, the @rhombus(id) is renamed in
+ If @rhombus(as, ~impo) is used, the @rhombus(id_or_op) is renamed in
  addition to being exposed, or in other words, it behaves like a
  combination of @rhombus(rename, ~impo) and @rhombus(expose, ~impo).
 
@@ -333,49 +333,49 @@
 
 @doc(
   ~nonterminal:
-    local_id: block id
+    local_id_or_op: block id_or_op
   impo.modifier 'rename $rename_as'
   impo.modifier 'rename:
                    $rename_as
                    ...'
   grammar rename_as
-  | $id #,(@rhombus(as, ~impo)) $local_id
+  | $id_or_op #,(@rhombus(as, ~impo)) $local_id_or_op
 ){
 
- Modifies an @rhombus(import) clause so that @rhombus(local_id)
- is used in place of the imported id name @rhombus(id).
- The new name @rhombus(local_id) applies to modifiers after the
+ Modifies an @rhombus(import) clause so that @rhombus(local_id_or_op)
+ is used in place of the imported id name @rhombus(id_or_op)).
+ The new name @rhombus(local_id_or_op) applies to modifiers after the
  @rhombus(rename, ~impo) modifier.
 
 }
 
 @doc(
   ~nonterminal:
-    id: block
+    id_or_op: block
     id_or_rename_as: expose ~impo
-  impo.modifier 'only $id_or_rename_as'
+  impo.modifier 'only $id_or_op_or_rename_as'
   impo.modifier 'only:
-                   $id_or_rename_as
+                   $id_or_op_or_rename_as
                    ...'
 ){
 
  Modifies an @rhombus(import) clause so that only the listed
- @rhombus(id)s are imported.
+ @rhombus(id_or_op)s are imported.
 
  Similar to @rhombus(expose, ~impo), if @rhombus(as, ~impo) is used,
- the @rhombus(id) is renamed in addition.
+ the @rhombus(id_or_op) is renamed in addition.
 
 }
 
 @doc(
-  impo.modifier 'except $id'
+  impo.modifier 'except $id_or_op'
   impo.modifier 'except:
-                   $id ...
+                   $id_or_op ...
                    ...'
 ){
 
  Modifies an @rhombus(import) clause so that the listed
- @rhombus(id)s are @emph{not} imported.
+ @rhombus(id_or_op)s are @emph{not} imported.
 
 }
 
@@ -425,10 +425,10 @@
 }
 
 @doc(
-  impo.modifier 'only_space $id'
-  impo.modifier 'only_space: $id ...'
-  impo.modifier 'except_space $id'
-  impo.modifier 'except_space: $id ...'
+  impo.modifier 'only_space $id_name'
+  impo.modifier 'only_space: $id_name ...'
+  impo.modifier 'except_space $id_name'
+  impo.modifier 'except_space: $id_name ...'
 ){
 
  Modifies an @rhombus(import) clause to include bindings only in the

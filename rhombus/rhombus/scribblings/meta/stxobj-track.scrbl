@@ -10,10 +10,10 @@
 As macros in a space are expanded, the resulting syntax object acquires
 an @rhombus(#'origin) @tech(~doc: ref_doc){syntax property} to track the history of expansion.
 Specifically, when the expander dispatches to a macro bound to
-@nontermref(op_or_id_name), then the result of the macro gets an @rhombus(#'origin)
-property with the use-site @nontermref(op_or_id_name) identifier. If a result
+@nontermref(id_or_op_name), then the result of the macro gets an @rhombus(#'origin)
+property with the use-site @nontermref(id_or_op_name) identifier. If a result
 already has an @rhombus(#'origin) property, then the existing value is
-combined with @nontermref(op_or_id_name) using @rhombus(Pair), and an
+combined with @nontermref(id_or_op_name) using @rhombus(Pair), and an
 @rhombus(#'origin) property value is in general a tree of identifiers.
 This information is used by DrRacket, for example, to draw binding
 arrows from uses or names to definitions of names.

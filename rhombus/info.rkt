@@ -26,6 +26,8 @@
     "shrubbery-lib"
     "rhombus-scribble-lib"
     "pict-doc"
+    "pict-lib"
+    "draw-lib"
     ["compiler-lib" #:version "1.13"]))
 
 (define pkg-desc "Rhombus base language")

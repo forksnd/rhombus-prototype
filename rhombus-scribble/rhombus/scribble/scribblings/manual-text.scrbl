@@ -132,3 +132,11 @@
  @hash_lang() syntax.
 
 }
+
+@doc(~include lib("rhombus/scribble/private/manual-text.rhm"):
+       filebox){
+
+ Renders @rhombus(pre_flow) in a nested box that is labeled as residing
+ a file names as @rhombus(name).
+
+}

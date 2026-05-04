@@ -9,12 +9,12 @@
 
 @doc(
   ~nonterminal:
-    new_op_or_id_name: namespace op_or_id_name ~defn
-    orig_op_or_id_name: namespace op_or_id_name ~defn
+    new_id_or_op_name: namespace id_or_op_name ~defn
+    orig_id_or_op_name: namespace id_or_op_name ~defn
 
-  defn.macro '«alias '$new_op_or_id_name':
+  defn.macro '«alias '$new_id_or_op_name':
                  $option
-                 '$orig_op_or_id_name'»'
+                 '$orig_id_or_op_name'»'
 
   grammar option
   | ~only_space $space ...
@@ -27,8 +27,8 @@
       ...
 ){
 
- Defines @rhombus(new_op_or_id_name) to be an alias for
- @rhombus(orig_op_or_id_name). By default, the new name is bound in all
+ Defines @rhombus(new_id_or_op_name) to be an alias for
+ @rhombus(orig_id_or_op_name). By default, the new name is bound in all
  @tech(~doc: meta_doc){spaces} where the original name is bound (before
  the @rhombus(alias, ~defn) form). The original name must be bound in
  some space.

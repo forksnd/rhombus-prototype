@@ -51,7 +51,7 @@
   | $macro_case
   |« Z| $macro_case
       | ...»
-  | $op_or_id_name:
+  | $id_or_op_name:
       $option; ...
     | $macro_case
     | ...

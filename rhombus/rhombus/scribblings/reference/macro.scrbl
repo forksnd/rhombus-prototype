@@ -16,7 +16,7 @@
   defn.macro 'macro
               | $macro_case
               | ...'
-  defn.macro 'macro $op_or_id_name:
+  defn.macro 'macro $id_or_op_name:
                 $option; ...
               | $macro_case
               | ...'

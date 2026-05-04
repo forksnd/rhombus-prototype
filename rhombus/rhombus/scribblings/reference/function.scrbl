@@ -67,8 +67,8 @@ form or @rhombus(fun) expression form, but see also
   | case_option
 
   grammar name_option
-  | ~name $op_or_id_name
-  | ~name: $op_or_id_name
+  | ~name $id_or_op_name
+  | ~name: $id_or_op_name
   | who_option
 
   grammar case_option
@@ -312,7 +312,7 @@ Only one @rhombus(#,(@rhombus(~&, ~bind)) map_bind) can appear in a @rhombus(res
  the submodule to extract the recorded information.
 
  When @rhombus(~name) is present as an @rhombus(option) or
- @rhombus(name_option), the given @rhombus(op_or_id_name) is used for
+ @rhombus(name_option), the given @rhombus(id_or_op_name) is used for
  reporting annotation failures on arguments and results, and it is also
  used when printing the function. Otherwise, @rhombus(id_name) is used.
  Supplying @rhombus(~name) does not change the name that is bound, which
@@ -321,7 +321,7 @@ Only one @rhombus(#,(@rhombus(~&, ~bind)) map_bind) can appear in a @rhombus(res
  When @rhombus(~who) is present as an @rhombus(option),
  @rhombus(name_option), or @rhombus(case_option), the given @rhombus(id)
  is bound to a symbol form of the function name---that is, to the symbol
- form of the defined @rhombus(id_name) or the @rhombus(op_or_id_name)
+ form of the defined @rhombus(id_name) or the @rhombus(id_or_op_name)
  provided with @rhombus(~name). A @rhombus(~who) binding is particularly
  useful as a symbol that can be provided to @rhombus(error). The
  @rhombus(id) for @rhombus(~who) is bound after the declaration, which

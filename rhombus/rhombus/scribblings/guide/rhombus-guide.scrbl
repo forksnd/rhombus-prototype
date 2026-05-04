@@ -26,6 +26,7 @@ This document is a general guide to the language. For more, see
 @include_section("io.scrbl")
 @include_section("macro.scrbl")
 @include_section("annotation-overview.scrbl")
+@include_section("module-and-package.scrbl")
 @include_section("lang.scrbl")
 @include_section("running.scrbl")
 @include_section("racket.scrbl")

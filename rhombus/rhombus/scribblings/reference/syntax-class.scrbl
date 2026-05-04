@@ -487,7 +487,7 @@
 @doc(
   ~also_meta
   ~nonterminal:
-    op_or_id_name: namespace ~defn
+    id_or_op_name: namespace ~defn
     id_name: namespace ~defn
   syntax_class Term: kind: ~term
   syntax_class Identifier: kind: ~term
@@ -540,7 +540,7 @@
 
  The @rhombus(Name, ~stxclass) syntax class is an extension of the union
  of @rhombus(Identifier, ~stxclass) and @rhombus(Operator, ~stxclass)
- that matches dotted sequences like an @rhombus(op_or_id_name) form.
+ that matches dotted sequences like an @rhombus(id_or_op_name) form.
 
  The @rhombus(IdentifierName, ~stxclass) syntax class is an extension
  of @rhombus(Identifier, ~stxclass)

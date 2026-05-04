@@ -55,7 +55,7 @@
 
 @doc(
   ~nonterminal:
-    op_or_id_name: namespace ~defn
+    id_or_op_name: namespace ~defn
     nonterm_id: block id
     id_or_op: block
     builtin_space: rhombus
@@ -80,6 +80,8 @@
   | #,(@rhombus(class, ~doc)) $class_spec
   | #,(@rhombus(interface, ~doc)) $interface_spec
   | #,(@rhombus(grammar, ~doc)) $grammar_spec
+  | #,(@rhombus(grammar_case, ~doc)) $grammar_case_spec
+  | #,(@rhombus(non_target, ~doc)) $entry
   | $other_doc_entry_form
   | ~include $mod_path:
       $id ...
@@ -97,13 +99,13 @@
   | ~also_meta
   | ~page
   grammar nt_key_ref
-  | $op_or_id_name
-  | $op_or_id_name $nonterm_id
-  | $op_or_id_name $space
-  | $op_or_id_name $nonterm_id $space
+  | $id_or_op_name
+  | $id_or_op_name $nonterm_id
+  | $id_or_op_name $space
+  | $id_or_op_name $nonterm_id $space
   grammar nt_key
-  | $op_or_id_name
-  | $op_or_id_name $space
+  | $id_or_op_name
+  | $id_or_op_name $space
   grammar space
   | $builtin_space
   | ~at $space_name
@@ -185,11 +187,11 @@
  @item{A @rhombus(~nonterminal) declaration causes the associated
   @rhombus(id) as a nonterminal to refer to a nonterminal declared with
   @rhombus(grammar) in another binding's documentation. The
-  @rhombus(op_or_id_name) is the other binding, and
+  @rhombus(id_or_op_name) is the other binding, and
   @rhombus(nonterm_id) is the name defined there, which
   defaults to @rhombus(id) if not supplied. A @rhombus(builtin_space)
   specification indicates the binding's space, and it's needed if the
-  binding space of @rhombus(op_or_id_name) is distinct from the expression
+  binding space of @rhombus(id_or_op_name) is distinct from the expression
   binding space.}
 
  @item{A @rhombus(~nonterminal_key) declaration selects the way that
@@ -244,12 +246,12 @@
   ~nonterminal:
     id_name: namespace ~defn
   doc 'fun $id_name($arg, ...) $term ...'
-  doc 'operator ($op_or_id_name $arg) $term ...'
-  doc 'operator ($arg_term $op_or_id_name $arg_term) $term ...'
+  doc 'operator ($id_or_op_name $arg) $term ...'
+  doc 'operator ($arg_term $id_or_op_name $arg_term) $term ...'
 ){
 
  A @tech{doc entry} form to document a function @rhombus(id_name) or
- operator @rhombus(op_or_id_name). Extra @rhombus(term)s can be anything,
+ operator @rhombus(id_or_op_name). Extra @rhombus(term)s can be anything,
  but would typically show a return annotation, if any.
 
  Each @rhombus(arg) is parsed like a @rhombus(fun) argument to infer
@@ -260,7 +262,7 @@
 
  To document a function or operator with multiple cases, uses
  @rhombus(fun, ~doc) or @rhombus(operator, ~doc) multiple times with the
- same @rhombus(id_name) or @rhombus(op_or_id_name) in the same
+ same @rhombus(id_name) or @rhombus(id_or_op_name) in the same
  @rhombus(doc) form.
 
 }
@@ -296,19 +298,19 @@
 @doc(
   ~nonterminal:
     id_name: namespace ~defn
-    op_or_id_name: namespace ~defn
-  doc '«expr.macro '$op_or_id_name $quoted_term ...' $term ...»'
-  doc '«expr.macro '#,(rhombus($, ~bind)) $op_or_id_name $id_name $quoted_term ...' $term ...»'
+    id_or_op_name: namespace ~defn
+  doc '«expr.macro '$id_or_op_name $quoted_term ...' $term ...»'
+  doc '«expr.macro '#,(rhombus($, ~bind)) $id_or_op_name $id_name $quoted_term ...' $term ...»'
   doc '«defn.macro '$id_name $quoted_term ...'»'
   doc '«decl.macro '$id_name $quoted_term ...'»'
   doc '«decl.nestable_macro '$id_name $quoted_term ...'»'
-  doc '«annot.macro '$op_or_id_name $quoted_term ...' $maybe_fallback»'
-  doc '«annot.macro '#,(rhombus($, ~bind)) $op_or_id_name $id_name $quoted_term ...' $maybe_fallback»'
-  doc '«bind.macro '$op_or_id_name $quoted_term ...'»'
-  doc '«bind.macro '#,(rhombus($, ~bind)) $op_or_id_name $id_name $quoted_term ...'»'
-  doc '«repet.macro '$op_or_id_name $quoted_term ...'»'
-  doc '«repet.macro '#,(rhombus($, ~bind)) $op_or_id_name $id_name $quoted_term ...'»'
-  doc '«meta.bridge $op_or_id_name $term ...»'
+  doc '«annot.macro '$id_or_op_name $quoted_term ...' $maybe_fallback»'
+  doc '«annot.macro '#,(rhombus($, ~bind)) $id_or_op_name $id_name $quoted_term ...' $maybe_fallback»'
+  doc '«bind.macro '$id_or_op_name $quoted_term ...'»'
+  doc '«bind.macro '#,(rhombus($, ~bind)) $id_or_op_name $id_name $quoted_term ...'»'
+  doc '«repet.macro '$id_or_op_name $quoted_term ...'»'
+  doc '«repet.macro '#,(rhombus($, ~bind)) $id_or_op_name $id_name $quoted_term ...'»'
+  doc '«meta.bridge $id_or_op_name $term ...»'
 
   grammar maybe_fallback
   | $(epsilon)
@@ -318,7 +320,7 @@
 
  A @tech{doc entry} form to document an expression, definition,
  declaration, annotation, binding, repetition macro, or other binding
- @rhombus(op_or_id_name) or @rhombus(id_name).
+ @rhombus(id_or_op_name) or @rhombus(id_name).
 
  In the @rhombus(quoted_term)s, a use of @rhombus($, ~bind) indicates
  that the subsequent identifier is a metavariable, as opposed to a
@@ -331,10 +333,10 @@
  In the @rhombus(annot.macro) case, @rhombus(maybe_fallback) can provide
  an alternate annotation name that is used when hyperlinking method names
  in @rhombus(rhombus) and @rhombus(rhombusblock) forms. When the context
- of a method name indicates the documented @rhombus(op_or_id_name) but
+ of a method name indicates the documented @rhombus(id_or_op_name) but
  the method cannot be found within that name as a namespace, then the
  @rhombus(id) after @rhombus(~method_fallback) is tried as a namespace.
- Typically, @rhombus(id) implies @rhombus(op_or_id_name), but not
+ Typically, @rhombus(id) implies @rhombus(id_or_op_name), but not
  necessarily; for example, @rhombus(ReadableString) falls back to
  @rhombus(String) due to the way that @rhombus(String) method accept
  @rhombus(ReadableString)s.
@@ -504,5 +506,31 @@
  @rhombus(quoted_term) sequence is typeset as in
  @rhombus(expr.macro, ~doc), where @rhombus($, ~bind) can prefix an
  identifier to make it a metavariable instead of a literal.
+
+}
+
+@doc(
+  doc 'grammar_case $string:
+         $quoted_term ...'
+){
+
+ Renders @rhombus(quoted_term) like a @rhombus(grammar, ~doc) case, and
+ without documenting any name in the sense of creating a hyperlink
+ target. The @rhombus(string) is used to describe the entry category (as
+ typically built into other @tech{doc entry} forms), such as
+ @rhombus("expression") or @rhombus("module path").
+
+}
+
+
+@doc(
+  ~nonterminal:
+    entry: doc
+  doc 'non_target:
+         $entry'
+){
+
+ Renders the same as @rhombus(entry), but without creating a hyperlink
+ target.
 
 }

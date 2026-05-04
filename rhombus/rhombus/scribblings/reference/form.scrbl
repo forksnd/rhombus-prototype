@@ -216,7 +216,7 @@ identifiers, expressions, or binding patterns.
   | $op
   | $id_name #,(@rhombus(., ~datum)) ($op)
 
-  grammar op_or_id_name
+  grammar id_or_op_name
   | $op_name
   | $id_name
 ){

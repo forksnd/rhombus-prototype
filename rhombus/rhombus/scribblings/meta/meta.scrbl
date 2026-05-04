@@ -46,17 +46,17 @@
 }
 
 @doc(
-  defn.macro 'meta.bridge $op_or_id_name:
+  defn.macro 'meta.bridge $id_or_op_name:
                 $body
                 ...'
 ){
 
- Binds @rhombus(op_or_id_name) at the enclosing phase, but like a macro,
+ Binds @rhombus(id_or_op_name) at the enclosing phase, but like a macro,
  where the @rhombus(body) side is a compile-time block at one phase
  greater than the enclosing phase.
 
  The result of the @rhombus(body) block might be a macro transformer
- that is triggered by a use of @rhombus(op_or_id_name), or it might be
+ that is triggered by a use of @rhombus(id_or_op_name), or it might be
  some other kind of value that is accessed with
  @rhombus(syntax_meta.value).
 
@@ -65,10 +65,10 @@
  those cases, the generated @rhombus(body) block produces an
  expression transformer, binding transformer, or annotation
  transformer. Some forms that expand to @rhombus(meta.bridge) enrich
- the @rhombus(op_or_id_name) with a scope for a @tech{space} of bindings, which
- enables overloading a @rhombus(op_or_id_name) for different contexts
+ the @rhombus(id_or_op_name) with a scope for a @tech{space} of bindings, which
+ enables overloading a @rhombus(id_or_op_name) for different contexts
  like expressions versus bindings. For example,
- @rhombus(annot.macro) enriches its @rhombus(op_or_id_name) with a
+ @rhombus(annot.macro) enriches its @rhombus(id_or_op_name) with a
  scope for annotation operators.
 
 }

@@ -373,12 +373,12 @@
   ~meta
   ~nonterminal:
     space_expr: block expr
-  unquote_bind.macro '«bound_as $space_expr: '$op_or_id_name'»'
+  unquote_bind.macro '«bound_as $space_expr: '$id_or_op_name'»'
 ){
 
  Unquote binding operator for use with @rhombus($, ~bind). It matches a
  syntax object for an identifier or operator, where the identifier or
- operator's binding is the same as @rhombus(op_or_id_name) in
+ operator's binding is the same as @rhombus(id_or_op_name) in
  the @rhombus(SpaceMeta, ~annot) reflected by @rhombus(space_expr) (e.g.,
  @rhombus(expr_meta.space)).
 

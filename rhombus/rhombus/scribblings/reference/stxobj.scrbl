@@ -290,7 +290,7 @@ or adjusted in any way
 
  @item{@rhombus(Name, ~annot) matches a syntax object that is an
   identifier, operator, or dotted multi-term group that fits the shape of
-  an @nontermref(op_or_id_name).}
+  an @nontermref(id_or_op_name).}
 
  @item{@rhombus(IdentifierName, ~annot) matches a syntax object that is an
   identifier or dotted multi-term group that fits the shape of

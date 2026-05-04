@@ -27,7 +27,7 @@
       ...
 
   grammar export_item
-  | $id_or_op
+  | $id_or_op_name
   | #,(@rhombus(all_from, ~expo))($source)
   | #,(@rhombus(rename, ~expo)) $rename_decl
   | #,(@rhombus(names, ~expo)) $names_decl
@@ -35,10 +35,6 @@
   | $export_item #,(@rhombus(#%juxtapose, ~expo)) $export_item
   | ($export_clause)
   | $other_export_item
-
-  grammar id_or_op
-  | $id_name
-  | $op_name
 
   grammar modifier
   | #,(@rhombus(except, ~expo)) $except_decl
@@ -74,11 +70,11 @@
  a block. The latter order works only if the @rhombus(modifier) itself
  does not need a block.
 
- An @rhombus(id_name) or @rhombus(op_name) export can be
+ An @rhombus(id_or_op_name) export can be
  an immediate identifier or operator, or it can be dotted name, such as
  @rhombus(List.length). The last component of a dotted name is used as
  the export name. See @secref("namespaces") for information on
- @rhombus(id_name) and @rhombus(op_name).
+ dotted names.
 
  When @rhombus(export) is used before a @rhombus(defn), the exported
  names are all of the ones defined by the @rhombus(defn). Only defined
@@ -155,16 +151,16 @@
 
 @doc(
   ~nonterminal:
-    int_id_or_op: block id_or_op
+    int_id_or_op_name: namespace id_or_op_name ~defn
     ext_id_or_op: block id_or_op
   expo.macro 'rename:
-                $int_id_or_op #,(@rhombus(as, ~expo)) $ext_id_or_op
+                $int_id_or_op_name #,(@rhombus(as, ~expo)) $ext_id_or_op
                 ...'
-  expo.macro 'rename $int_id_or_op #,(@rhombus(as, ~expo)) $ext_id_or_op'
+  expo.macro 'rename $int_id_or_op_name #,(@rhombus(as, ~expo)) $ext_id_or_op'
 ){
 
  For each @rhombus(as, ~expo) group, exports
- @rhombus(int_id_or_op) bound locally so that it's
+ @rhombus(int_id_or_op_name) bound locally so that it's
  imported as @rhombus(ext_id_or_op).
 
 }
@@ -284,10 +280,10 @@
 
 
 @doc(
-  expo.modifier 'only_space $id'
-  expo.modifier 'only_space: $id ...'
-  expo.modifier 'except_space $id'
-  expo.modifier 'except_space: $id ...'
+  expo.modifier 'only_space $id_name'
+  expo.modifier 'only_space: $id_name ...'
+  expo.modifier 'except_space $id_name'
+  expo.modifier 'except_space: $id_name ...'
 ){
 
  Modifies an @rhombus(export) clause to include bindings only in the
