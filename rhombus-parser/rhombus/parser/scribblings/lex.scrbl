@@ -12,7 +12,8 @@
           rx_concatenation
           rx_disjunction
           rx_conjunction
-          rx_subtraction)
+          rx_subtraction
+      rhombus/port)
 
 @(def ref_doc = ModulePath 'lib("rhombus/scribblings/reference/rhombus-reference.scrbl")')
 
@@ -127,6 +128,12 @@ match. Still, the same syntax is used as much as possible, and the
   lex(i)
   lex(i)
 )
+
+ A function produced by @rhombus(lexer) consumes characters from the
+ given input port. To peek characters from an input port, instead of
+ consuming them, use @rhombus(port.input.peeking) from
+ @rhombusmodname(rhombus/port) to make a peeking wrapper for an input
+ port.
 
 }
 
