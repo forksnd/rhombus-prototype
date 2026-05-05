@@ -1,6 +1,7 @@
 #lang racket/base
 (require (for-syntax racket/base
-                     syntax/parse/pre)
+                     syntax/parse/pre
+                     "srcloc.rkt")
          racket/flonum
          racket/fixnum
          "provide.rkt"
@@ -12,11 +13,11 @@
          "static-info.rkt"
          "flonum-key.rkt"
          "fixnum-key.rkt"
-         "indirect-static-info-key.rkt"
          "static-info.rkt"
          "rhombus-primitive.rkt"
          "order.rkt"
-         "order-primitive.rkt")
+         "order-primitive.rkt"
+         "parens.rkt")
 
 (provide (for-spaces (#f
                       rhombus/repet)
@@ -219,25 +220,30 @@
 (define-comp-infix #:who .> > fl> fx>)
 
 (define-for-syntax (make-comparable-op op flop fxop)
-  (lambda (stx)
-    (syntax-parse stx
-      [(op/flfx a b)
-       (let ([use-op
-              (cond
-                [(and (flonum-statinfo? #'a)
-                      (flonum-statinfo? #'b))
-                 flop]
-                [(and (fixnum-statinfo? #'a)
-                      (fixnum-statinfo? #'b))
-                 fxop]
-                [else
-                 op])])
-         (datum->syntax stx
-                        (list (datum->syntax use-op (syntax-e use-op) #'op/flfx #'op/flfx)
-                              (discard-static-infos #'a)
-                              (discard-static-infos #'b))
-                        stx
-                        stx))])))
+  (expression-transformer
+   (lambda (tail)
+     (syntax-parse tail
+       #:datum-literals (group parsed)
+       [(form-id (~and p (tag::parens
+                          (group (parsed #:rhombus/expr a))
+                          (group (parsed #:rhombus/expr b))))
+                 . new-tail)
+        (define use-op
+          (cond
+            [(and (flonum-statinfo? #'a)
+                  (flonum-statinfo? #'b))
+             flop]
+            [(and (fixnum-statinfo? #'a)
+                  (fixnum-statinfo? #'b))
+             fxop]
+            [else op]))
+        (values
+         (relocate+reraw
+          (respan (datum->syntax #f (list #'form-id #'p)))
+          #`(#,use-op #,(discard-static-infos #'a) #,(discard-static-infos #'b)))
+         #'new-tail)]
+       [(form-id . new-tail)
+        (error "shouldn't get here")]))))
 
 (define-syntax </flfx (make-comparable-op #'< #'fl< #'fx<))
 (define-syntax <=/flfx (make-comparable-op #'<= #'fl<= #'fx<=))

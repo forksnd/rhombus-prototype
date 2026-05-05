@@ -124,14 +124,14 @@
    (respan (datum->syntax #f orig-stxes))
    #:prop-stx (cadr orig-stxes)
    (datum->syntax (quote-syntax here)
-                  (let ([form1 (discard-static-infos form1)]
-                        [form2 (discard-static-infos form2)])
-                    (if direct?
-                        (build-info-syntax-call '#%append append-expr form1 form2)
-                        `(,#'let ([a1 ,form1]
-                                  [a2 ,form2])
-                                 (,#'check-appendable a1 a2)
-                                 ,(build-info-syntax-call '#%append append-expr #'a1 #'a2)))))))
+                  (if direct?
+                      (build-info-syntax-call '#%append append-expr form1 form2)
+                      `(,#'let ([a1 ,(discard-static-infos form1)]
+                                [a2 ,(discard-static-infos form2)])
+                               (,#'check-appendable a1 a2)
+                               ,(build-info-syntax-call '#%append append-expr
+                                                        (wrap-static-info* #'a1 (extract-static-infos form1))
+                                                        (wrap-static-info* #'a2 (extract-static-infos form2))))))))
 
 (define-syntax ++
   (expression-infix-operator

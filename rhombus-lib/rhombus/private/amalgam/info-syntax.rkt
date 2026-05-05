@@ -1,11 +1,11 @@
 #lang racket/base
 (require (for-syntax racket/base
-                     syntax/parse/pre
                      enforest/syntax-local
                      "pack.rkt")
          "parse.rkt"
          "expression.rkt"
-         "simple-call.rkt")
+         "simple-call.rkt"
+         "static-info.rkt")
 
 (provide (for-syntax build-info-syntax-call))
 
@@ -14,7 +14,7 @@
     (define t (unpack-term e #f #f))
     (if (and (identifier? t)
              (not (syntax-local-value* t expression-prefix-operator-ref)))
-        #`(#,t #,@args)
+        #`(#,t #,@(map discard-static-infos args))
         #`(rhombus-expression
            (#,@(unpack-group e who #f)
             (#,(add-call-context #'parens)

@@ -214,8 +214,8 @@
    (datum->syntax (quote-syntax here)
                   (let ([e (if direct?
                                (build-info-syntax-call '#%compare compare-expr form1 form2)
-                               `(,#'let ([a1 ,form1]
-                                         [a2 ,form2])
+                               `(,#'let ([a1 ,(discard-static-infos form1)]
+                                         [a2 ,(discard-static-infos form2)])
                                         (,#'check-comparable ',(case op
                                                                  [(=) 'compares_equal]
                                                                  [(!=) 'compares_unequal]
@@ -230,7 +230,9 @@
                                                                 [(>) 6])
                                                              a1
                                                              a2)
-                                        ,(build-info-syntax-call '#%compare compare-expr #'a1 #'a2)))])
+                                        ,(build-info-syntax-call '#%compare compare-expr
+                                                                 (wrap-static-info* #'a1 (extract-static-infos form1))
+                                                                 (wrap-static-info* #'a2 (extract-static-infos form2)))))])
                     (if immediate?
                         e
                         `(,op ,e 0))))))

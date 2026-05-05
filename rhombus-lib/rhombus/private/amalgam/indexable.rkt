@@ -184,7 +184,7 @@
                                           (raise-syntax-error who (not-static) indexable-in)
                                           #'indexable-get)))
        (define e (datum->syntax (quote-syntax here)
-                                (build-info-syntax-call '#%index indexable-ref-expr (discard-static-infos indexable) (discard-static-infos index))
+                                (build-info-syntax-call '#%index indexable-ref-expr indexable index)
                                 (span-srcloc indexable #'head)
                                 #'head))
        (define result-static-infos (cond
