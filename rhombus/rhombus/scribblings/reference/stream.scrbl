@@ -10,8 +10,8 @@ A @deftech{stream} is a stateless @tech{sequence} that supports
 @rhombus(Stream.first) multiple times for the same stream will produce
 the same result, and calling @rhombus(Stream.rest) multiple times for the
 same stream will produce the same new stream that omits the first
-element. @tech{Lists}, @tech{pair lists}, and sequenceable @tech{ranges}
-are streams, as well as lazy streams constructed using
+element. @tech{Lists}, @tech{pair lists}, sequenceable @tech{ranges},
+and descending ranges are streams, as well as lazy streams constructed using
 @rhombus(Stream.cons).
 
 A stream is @tech{indexable} using @brackets to access a stream
@@ -28,7 +28,7 @@ element by position via @rhombus(#%index).
  @rhombus(Stream, ~annot), but elements drawn from the stream via
  @rhombus(Stream.first) have the static information of  the @rhombus(annot)s
  (where multiple @rhombus(annot)s correspond to multiple values for each
- element, such as the key and value from a @tech{map}). The
+ element, potentially in streams created with @rhombus(Stream.cons)). The
  extracted elements are not checked, however; each
  @rhombus(annot) is used only for its static information, and
  each @rhombus(annot) must be a @tech(~doc: model_doc){predicate annotation}.
