@@ -460,11 +460,10 @@
        [_ (static-infos-maybe-dependent-result-or as bs)])]))
 
 (define-static-info-key-syntax/provide #%maybe
-  (static-info-key static-infos-result-or
-                   static-infos-result-and))
+  (static-info-key static-infos-or
+                   static-infos-and))
 
 (define-for-syntax (merge-dependent-results as bs merge-dependent-id merge)
-
   (syntax-parse as
     #:literals (#%dependent-result)
     [((#%dependent-result (~and a-clos (_ _ . a-env))))
