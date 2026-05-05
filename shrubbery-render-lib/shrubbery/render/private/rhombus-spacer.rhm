@@ -74,6 +74,8 @@ export:
       s_Set as Set
       s_MutableSet as MutableSet
       s_WeakMutableSet as WeakMutableSet
+    &
+    ~&
     for
     while
     each
@@ -1037,6 +1039,14 @@ spacer.bridge s_WeakMutableSet(self, tail, context, esc):
 spacer.bridge WeakMutableSet.by(self, tail, context, esc):
   ~in: ~expr ~annot
   adjust_set_map_by_constructor('WeakMutableSet', self, tail, context, esc)
+
+spacer.bridge &(self, tail, context, esc):
+  ~in: ~expr ~bind
+  '$self $(spacer.adjust_sequence(tail, context, esc))'
+
+spacer.bridge ~&(self, tail, context, esc):
+  ~in: ~expr ~bind
+  '$self $(spacer.adjust_sequence(tail, context, esc))'
 
 meta:
   def for_spaces = [#'#{rhombus/for_clause}, & body_spaces]

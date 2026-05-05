@@ -338,8 +338,8 @@ check_spacer:
   $defn
   | $none([] $bind [$bind]):
       $datum
-  | $none([$bind, $bind, $bind $bind]):
-      $body $body $body $body $body([$body, $body $body])
+  | $none([$bind, $bind, $(bind.full) $bind]):
+      $body $body $body $body $body([$body, $(expr.full) $body])
 
 check_spacer:
   fun
