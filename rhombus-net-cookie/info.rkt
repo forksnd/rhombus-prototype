@@ -10,8 +10,7 @@
   '("rhombus"
     "rhombus-scribble-lib"
     "rhombus-url"
-    "rhombus-http"
-    "racket-test"))
+    "rhombus-http"))
 
 (define pkg-desc "Rhombus library for RFC 6265 cookies")
 

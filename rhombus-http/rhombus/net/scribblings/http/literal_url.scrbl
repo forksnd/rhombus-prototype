@@ -4,8 +4,7 @@
       rhombus open
       net/http
       net/http open
-      net/url
-      lib("net/http-easy.rkt") as easy)
+      net/url)
 
 @title(~tag: "literal_url"){Literal URLs}
 

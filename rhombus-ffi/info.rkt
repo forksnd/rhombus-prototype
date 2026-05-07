@@ -10,7 +10,6 @@
   '("rhombus"
     "racket-doc" ; via `hash_lang`
     "rhombus-scribble-lib"
-    "racket-test"
     "ffi2"
     "rhombus-draw"))
 

@@ -7,8 +7,7 @@
 (define implies '("rhombus-http-lib"))
 
 (define build-deps
-  '("http-easy"
-    "rhombus"
+  '("rhombus"
     "rhombus-scribble-lib"
     "rhombus-json"
     "rhombus-url"

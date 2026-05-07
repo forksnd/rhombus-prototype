@@ -8,8 +8,7 @@
 
 (define build-deps
   '("rhombus"
-    "rhombus-scribble-lib"
-    "racket-test"))
+    "rhombus-scribble-lib"))
 
 (define pkg-desc "Rhombus SSL library")
 

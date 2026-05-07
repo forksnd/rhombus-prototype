@@ -10,6 +10,7 @@
     ;; certain basic set of libraries when someone installs just
     ;; "rhombus":
     "shrubbery"
+    "rhombus-ffi"
     "rhombus-draw"
     "rhombus-gui"
     "rhombus-pict"
