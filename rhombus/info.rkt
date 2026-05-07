@@ -5,6 +5,7 @@
 (define deps
   '("base"
     "rhombus-lib"
+    "rhombus-exe"
     ;; The following dependencies serve a similar role to the
     ;; "rhombus-main-distribution" package, which is to ensure a
     ;; certain basic set of libraries when someone installs just
