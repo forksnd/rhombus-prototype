@@ -1,0 +1,42 @@
+#lang rhombus/static
+import:
+  net/url
+  lib("distro-build/repackage.rkt")
+
+export:
+  build_installer
+
+fun build_installer(racket_version, config_file):
+  def rhombus_version :: String:
+    Evaluator.instantiate(ModulePath'"rhombus-lib/rhombus/private/amalgam/version.rkt"', #'version)
+
+  def log_dir = "compiled/repackage/build/log"
+  filesystem.make_directory(log_dir, ~parents: #true)
+
+  Port.Output.using ~file log_dir +/ "server":
+    ~exists: #'truncate
+    Port.Output.current().buffer(#'line)
+    parameterize { Port.Output.current_error: Port.Output.current() }:
+      repackage.repackage(
+        ~version: racket_version,
+        ~#{file-name-version}: rhombus_version ++ "+" ++ racket_version,
+        ~#{version-note}: " with Rhombus version " ++ rhombus_version,
+        ~#{skip-notarize?}: #false,
+        ~catalogs: PairList[to_string(url.URL.from_path(Path("compiled/repackage/build/built/catalog/").to_absolute_path()))],
+        ~#{dist-catalogs}: PairList["https://download.rhombus-lang.org/releases/" ++ rhombus_version ++ "/catalog/"],
+        ~config: config_file,
+        ~#{config-mode}: "release=" ++ rhombus_version
+      )
+
+module main:
+  import:
+    rhombus/cmdline
+  def config:
+    cmdline.parse:
+      cmdline.flag "--version" #{racket-version}
+      cmdline.flag "--config" file
+
+  build_installer(config.maybe[#'version]
+                    || error("Racket verson is required"),
+                  config.maybe[#'config]
+                    || error("configuration file is required"))

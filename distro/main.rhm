@@ -1,0 +1,23 @@
+#lang rhombus/static
+import:
+  "catalog.rhm"
+  "installer.rhm"
+  "site.rhm"
+
+fun build(config, version):
+  catalog.build_catalog(version)
+  installer.build_installer(config, version)
+  site.build_site(config, version)
+
+module main:
+  import:
+    rhombus/cmdline
+  def config:
+    cmdline.parse:
+      cmdline.flag "--version" #{racket-version}
+      cmdline.flag "--config" file
+
+  build(config.maybe[#'version]
+          || error("Racket verson is required"),
+        config.maybe[#'config]
+          || error("configuration file is required"))

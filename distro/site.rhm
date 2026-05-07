@@ -1,0 +1,30 @@
+#lang rhombus/static
+import:
+  net/url
+  lib("distro-build/repackage.rkt")
+
+export:
+  build_site
+
+fun build_site(racket_version, config_file):
+  def rhombus_version :: String:
+    Evaluator.instantiate(ModulePath'"rhombus-lib/rhombus/private/amalgam/version.rkt"', #'version)
+
+  repackage.#{assemble-site}(
+    ~config: config_file,
+    ~#{config-mode}: "release=" ++ rhombus_version,
+    ~#{site-dest}: "compiled/repackage/site"
+  )
+
+module main:
+  import:
+    rhombus/cmdline
+  def config:
+    cmdline.parse:
+      cmdline.flag "--version" #{racket-version}
+      cmdline.flag "--config" file
+
+  build_site(config.maybe[#'version]
+               || error("Racket verson is required"),
+             config.maybe[#'config]
+               || error("configuration file is required"))
