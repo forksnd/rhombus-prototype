@@ -22,7 +22,7 @@ fun build_catalog(racket_version):
 
   def local_packages:
     for List (f in filesystem.files(src_dir)):
-      skip_when f == "no-ffi"
+      skip_when f == Path("no-ffi")
       skip_when !filesystem.file_exists(src_dir +/ f +/ "info.rkt")
       to_string(f)
 

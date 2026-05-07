@@ -4,10 +4,10 @@ import:
   "installer.rhm"
   "site.rhm"
 
-fun build(config, version):
+fun build(version, config):
   catalog.build_catalog(version)
-  installer.build_installer(config, version)
-  site.build_site(config, version)
+  installer.build_installer(version, config)
+  site.build_site(version, config)
 
 module main:
   import:
