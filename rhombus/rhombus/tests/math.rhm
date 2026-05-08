@@ -21,6 +21,9 @@ block:
     math.atan([y], x)
     math.exact(x)
     math.inexact(x)
+    math.complex(x, y)
+    math.complex_polar(x, y)
+    math.cis(x)
     math.real_part(x)
     math.imag_part(x)
     math.magnitude(x)
@@ -138,3 +141,10 @@ check:
      math.sum(0) > x,
      math.product(0) > x]
   ~completes
+
+check:
+  math.i ~is_a Number
+  math.i is_a Real ~is #false
+  2 + math.i ~is #{2+i}
+  math.complex(1, 2) ~is #{1+2i}
+  math.cis(12.345) ~is math.complex_polar(1, 12.345)

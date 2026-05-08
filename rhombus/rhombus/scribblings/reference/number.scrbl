@@ -6,7 +6,7 @@
 
 @title(~style: #'toc){Numbers}
 
-A number can be an @deftech{integer} (see @rhombus(Integer, ~annot)),
+A number can be an @deftech{integer} (see @rhombus(Int, ~annot)),
 @deftech{rational number} (see @rhombus(Rational, ~annot)), or
 @deftech{real number} (see @rhombus(Real, ~annot)), or @deftech{complex
  number} (see @rhombus(Number, ~annot)), where each of those categories
@@ -41,13 +41,15 @@ The syntax of numbers is determined by the
 @seclink(~doc: shrub_doc, "token-parsing"){shrubbery} layer. Note that
 @litchar{_} is allowed as a separator between digits, so
 @rhombus(1_000_000) is the same as @rhombus(1000000). Complex number
-literals rely on a escape to S-expression syntax.
+literals rely on a escape to S-expression syntax using @litchar{#{}},
+but the @rhombus(to_string) conversion of a complex number omits
+@litchar{#{}}.
 
 @doc(
   annot.macro 'Number'
 ){
 
- Matches any number.
+ Matches any number, including a complex number.
 
  Although only @tech{real numbers} are comparable, to make the results of
  arithmetic operations easier to compare in static mode, static
@@ -456,20 +458,34 @@ literals rely on a escape to S-expression syntax.
 
 
 @doc(
+  def math.i :: Number
+  fun math.complex(real :: Real, imag :: Real) :: Number
+  fun math.complex_polar(magnitude :: Real, angle :: Real) :: Number
+  fun math.cis(angle :: Real) :: Number
   fun math.real_part(x :: Number) :: Real
   fun math.imag_part(x :: Number) :: Real
   fun math.magnitude(x :: Number) :: Real
   fun math.angle(x :: Number) :: Real
 ){
 
- Operations on @tech{complex numbers}.
+ A constant and operations for @tech{complex numbers}.
+
+ The complex number @rhombus(math.i) has a real part is @rhombus(0) and
+ imaginary part @rhombus(1). This number can also be written
+ @rhombus(#{+i}).
+
+ The result of @rhombus(math.cis(angle)) is the same as the result of
+ @rhombus(math.complex_polar(1, angle)).
 
 @examples(
+  math.complex(1, 2)
+  math.complex_polar(2, math.pi * 3/4)
+  2 * math.cis(math.pi * 3/4)
   math.real_part(5)
-  math.real_part(math.sqrt(-1))
-  math.imag_part(math.sqrt(-1))
-  math.magnitude(1 + math.sqrt(-1))
-  math.angle(1 + math.sqrt(-1))
+  math.real_part(math.i)
+  math.imag_part(math.i)
+  math.magnitude(1 + math.i)
+  math.angle(1 + math.i)
 )
 
 }

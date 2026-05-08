@@ -29,6 +29,7 @@
 (define-name-root math
   #:fields
   (pi
+   i
    [abs abs/fl]
    [min min/fl]
    [max max/fl]
@@ -49,6 +50,9 @@
    denominator
    gcd lcm
    magnitude angle
+   [complex make-rectangular]
+   [complex_polar make-polar]
+   cis
    [real_part real-part]
    [imag_part imag-part]
    [exact inexact->exact]
@@ -59,6 +63,7 @@
    sum product))
 
 (define pi (atan 0 -1))
+(define i +i)
 
 (define-syntax (define-fl stx)
   (syntax-parse stx
@@ -152,7 +157,8 @@
   (#%function-arity 2)
   . #,(indirect-get-function-static-infos))
 
-(define-static-info-syntaxes (expt)
+(define-static-info-syntaxes (expt
+                              make-rectangular make-polar)
   (#%call-result #,(get-number-static-infos))
   (#%function-arity 4)
   . #,(indirect-get-function-static-infos))
@@ -209,6 +215,10 @@
                                "start index" start
                                "end index" end))
      (+ (rhombus-random (- end start)) start)]))
+
+(define/arity (cis n)
+  (unless (real? n) (raise-annotation-failure who n "Real"))
+  (make-polar 1 n))
 
 (define-syntax (define-nary stx)
   (syntax-parse stx
@@ -294,6 +304,13 @@
 
 (define (raise-number-error who v)
   (raise-annotation-failure who v "Number"))
+
+(void (set-primitive-who! 'make-rectangular 'complex))
+(void (set-primitive-who! 'make-polar 'complex_polar))
+(void (set-primitive-who! 'real-part 'real_part))
+(void (set-primitive-who! 'imag-part 'imag_part))
+(void (set-primitive-who! 'inexact->exact 'exact))
+(void (set-primitive-who! 'exact->inexact 'inexact))
 
 (void (set-primitive-who! 'flabs 'abs))
 (void (set-primitive-who! 'flmin 'min))
