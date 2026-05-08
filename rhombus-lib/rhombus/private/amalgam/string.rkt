@@ -127,6 +127,7 @@
    [normalize_nfkc String.normalize_nfkc]
    [grapheme_span String.grapheme_span]
    [grapheme_count String.grapheme_count]
+   [to_list String.to_list]
    [to_sequence String.to_sequence]
    [copy String.copy]
    [snapshot String.snapshot]))
@@ -178,6 +179,8 @@
    [normalize_nfkc String.normalize_nfkc]
    [grapheme_span String.grapheme_span]
    [grapheme_count String.grapheme_count]
+   [to_list String.to_list]
+   [from_list String.from_list]
    [to_sequence String.to_sequence]
    [copy String.copy]
    [snapshot String.snapshot])
@@ -660,6 +663,20 @@
 
 (define-grapheme span)
 (define-grapheme count)
+
+(define/method (String.to_list str)
+  #:static-infos ((#%call-result ((#%index-result #,(get-char-static-infos))
+                                  #,@(get-treelist-static-infos))))
+  (check-readable-string who str)
+  (for/treelist ([c (in-string str)])
+    c))
+
+(define/method (String.from_list lst)
+  #:static-infos ((#%call-result #,(get-string-static-infos)))
+  (unless (and (treelist? lst)
+               (for/and ([c (in-treelist lst)]) (char? c)))
+    (raise-annotation-failure who lst "List.of(Char)"))
+  (string->immutable-string (list->string (treelist->list lst))))
 
 (define-sequence-syntax String.to_sequence/optimize
   (lambda () #'String.to_sequence)

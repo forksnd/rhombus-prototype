@@ -327,6 +327,20 @@ like @rhombus(<) and @rhombus(>) work on byte strings.
 
 }
 
+@doc(
+  method Bytes.to_list(str :: Bytes) :: List.of(Char)
+  fun Bytes.from_list(lst :: List.of(Char)) :: Bytes
+){
+
+ Converts a byte string to or from a list of bytes.
+
+@examples(
+  #"apple".to_list()
+  Bytes.from_list([104, 105, 33])
+)
+
+}
+
 
 @doc(
   method (bstr :: Bytes).to_sequence(bstr :: Bytes) :: Sequence

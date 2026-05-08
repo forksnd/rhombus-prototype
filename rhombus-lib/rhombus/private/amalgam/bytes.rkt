@@ -2,6 +2,7 @@
 (require (for-syntax racket/base
                      syntax/parse/pre)
          racket/mutability
+         racket/treelist
          "provide.rkt"
          (submod "literal.rkt" for-info)
          "define-arity.rkt"
@@ -20,6 +21,7 @@
          "static-info.rkt"
          (submod "range.rkt" for-substring)
          (submod "char.rkt" for-static-info)
+         (submod "list.rkt" for-compound-repetition)
          "slice.rkt")
 
 (provide (for-spaces (rhombus/annot
@@ -55,7 +57,8 @@
   #:just-annot
   #:fields ()
   #:namespace-fields
-  ([make Bytes.make])
+  ([make Bytes.make]
+   [from_list Bytes.from_list])
   #:properties
   ()
   #:methods
@@ -74,6 +77,7 @@
    utf8_length
    utf8_ref
    utf8_index
+   to_list
    to_sequence
    snapshot))
 
@@ -204,6 +208,20 @@
 (define/method (Bytes.fill bstr b)
   #:primitive (bytes-fill!)
   (bytes-fill! bstr b))
+
+(define/method (Bytes.to_list bstr)
+  #:static-infos ((#%call-result ((#%index-result #,(get-int-static-infos))
+                                  #,@(get-treelist-static-infos))))
+  (check-bytes who bstr)
+  (for/treelist ([c (in-bytes bstr)])
+    c))
+
+(define/method (Bytes.from_list lst)
+  #:static-infos ((#%call-result #,(get-bytes-static-infos)))
+  (unless (and (treelist? lst)
+               (for/and ([c (in-treelist lst)]) (byte? c)))
+    (raise-annotation-failure who lst "List.of(Byte)"))
+  (list->bytes (treelist->list lst)))
 
 (define-sequence-syntax Bytes.to_sequence/optimize
   (lambda () #'Bytes.to_sequence)

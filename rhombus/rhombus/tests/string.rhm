@@ -42,6 +42,8 @@ block:
     String.grapheme_span(str, [start], [end]) ~method ReadableString
     String.grapheme_count(str, [start], [end]) ~method ReadableString
     String.to_sequence(str) ~method ReadableString
+    String.to_list(str) ~method ReadableString
+    String.from_list(lst)
     String.copy(str) ~method ReadableString
     String.snapshot(str) ~method ReadableString
 
@@ -708,3 +710,10 @@ check:
   "" is_a StringNoNull ~is #true
   "a\0b" is_a StringNoNull ~is #false
   "a".copy() is_a StringNoNull ~is #false
+
+check:
+  "a".to_list() ~is [Char"a"]
+  String.from_list([Char"a", Char"b", Char"c"]) ~is "abc"
+  String.from_list([1]) ~throws values("from_list",
+                                       error.annot_msg(),
+                                       error.annot("List.of(Char)").msg)

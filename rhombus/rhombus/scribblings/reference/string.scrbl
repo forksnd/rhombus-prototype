@@ -530,7 +530,7 @@ Strings are @tech{comparable}, which means that generic operations like
 
  The same as @rhombus(to_string), but constrained to a
  @rhombus(ReadableString, ~annot) argument. In other words, these
- equivalent to @rhombus(String.snapshot). The
+ are equivalent to @rhombus(String.snapshot). The
  @rhombus(ReadableString.to_string, ~annot) function exists for
  consistency with the @rhombus(ReadableString.to_string, ~annot)
  annotation.
@@ -595,6 +595,20 @@ Strings are @tech{comparable}, which means that generic operations like
 
  The @rhombus(start) and @rhombus(end) arguments must be valid indices as
  for @rhombus(String.substring).
+
+}
+
+@doc(
+  method String.to_list(str :: ReadableString) :: List.of(Char)
+  fun String.from_list(lst :: List.of(Char)) :: String
+){
+
+ Converts a string to or from a list of characters.
+
+@examples(
+  "apple".to_list()
+  String.from_list([Char"e", Char"t", Char"c", Char"."])
+)
 
 }
 

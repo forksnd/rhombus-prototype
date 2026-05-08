@@ -379,9 +379,15 @@ block:
   check #"a"[0] >= #"b"[0] ~is #false
   check #"a"[0] > #"b"[0] ~is #false
 
-
 check:
   #"a" is_a BytesNoNull ~is #true
   #"" is_a BytesNoNull ~is #true
   #"a\0b" is_a BytesNoNull ~is #false
   #"a".copy() is_a BytesNoNull ~is #true
+
+check:
+  #"a".to_list() ~is [Byte#"a"]
+  Bytes.from_list([1, 2, 3]) ~is_now #"\1\2\3"
+  Bytes.from_list(["1"]) ~throws values("from_list",
+                                        error.annot_msg(),
+                                        error.annot("List.of(Byte)").msg)
