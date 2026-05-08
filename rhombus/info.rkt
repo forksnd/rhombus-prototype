@@ -15,7 +15,9 @@
     "rhombus-draw"
     "rhombus-gui"
     "rhombus-pict"
-    "rhombus-scribble"))
+    "rhombus-scribble"
+    "xrepl"
+    "expeditor"))
 
 (define implies '("rhombus-lib"))
 

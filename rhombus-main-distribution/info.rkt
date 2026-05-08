@@ -5,11 +5,11 @@
 (define deps
   '("rhombus"
 
+    "rhombus-ffi"
     "rhombus-draw"
     "rhombus-gui"
     "rhombus-pict"
     "rhombus-scribble"
-    "rhombus-ffi"
 
     "rhombus-ssl"
     "rhombus-http"
@@ -22,7 +22,9 @@
     "rhombus-icons"
     "rhombus-logo"
 
-    "drracket-core"))
+    "drracket-core"
+    "xrepl"
+    "expeditor"))
 
 (define pkg-desc "A package that combines all of the packages in the main Rhombus distribution")
 
