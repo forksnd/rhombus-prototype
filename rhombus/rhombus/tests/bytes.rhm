@@ -385,9 +385,13 @@ check:
   #"a\0b" is_a BytesNoNull ~is #false
   #"a".copy() is_a BytesNoNull ~is #true
 
-check:
-  #"a".to_list() ~is [Byte#"a"]
-  Bytes.from_list([1, 2, 3]) ~is_now #"\1\2\3"
-  Bytes.from_list(["1"]) ~throws values("from_list",
-                                        error.annot_msg(),
-                                        error.annot("List.of(Byte)").msg)
+block:
+  use_static
+  check:
+    #"a".to_list() ~is [Byte#"a"]
+    #"a".to_list().length() ~is 1
+    Bytes.from_list([1, 2, 3]) ~is_now #"\1\2\3"
+    Bytes.from_list([1, 2, 3])[0] > dynamic(0) ~is #true
+    Bytes.from_list(["1"]) ~throws values("from_list",
+                                          error.annot_msg(),
+                                          error.annot("List.of(Byte)").msg)

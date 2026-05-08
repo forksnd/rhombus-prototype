@@ -711,9 +711,13 @@ check:
   "a\0b" is_a StringNoNull ~is #false
   "a".copy() is_a StringNoNull ~is #false
 
-check:
-  "a".to_list() ~is [Char"a"]
-  String.from_list([Char"a", Char"b", Char"c"]) ~is "abc"
-  String.from_list([1]) ~throws values("from_list",
-                                       error.annot_msg(),
-                                       error.annot("List.of(Char)").msg)
+block:
+  use_static
+  check:
+    "a".to_list() ~is [Char"a"]
+    "a".to_list().length() ~is 1
+    String.from_list([Char"a", Char"b", Char"c"]) ~is "abc"
+    String.from_list([Char"a", Char"b", Char"c"])[0].to_int() ~is Byte#"a"
+    String.from_list([1]) ~throws values("from_list",
+                                         error.annot_msg(),
+                                         error.annot("List.of(Char)").msg)
