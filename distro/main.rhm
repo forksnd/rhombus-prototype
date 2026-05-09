@@ -2,22 +2,15 @@
 import:
   "catalog.rhm"
   "installer.rhm"
+  "doc.rhm"
   "site.rhm"
 
 fun build(version, config):
   catalog.build_catalog(version)
   installer.build_installer(version, config)
+  doc.build_docs(version, config)
   site.build_site(version, config)
 
 module main:
-  import:
-    rhombus/cmdline
-  def config:
-    cmdline.parse:
-      cmdline.flag "--version" #{racket-version}
-      cmdline.flag "--config" file
-
-  build(config.maybe[#'version]
-          || error("Racket verson is required"),
-        config.maybe[#'config]
-          || error("configuration file is required"))
+  import "cmdline.rhm"
+  cmdline.parse(build)

@@ -31,14 +31,5 @@ fun build_installer(racket_version, config_file):
       )
 
 module main:
-  import:
-    rhombus/cmdline
-  def config:
-    cmdline.parse:
-      cmdline.flag "--version" #{racket-version}
-      cmdline.flag "--config" file
-
-  build_installer(config.maybe[#'version]
-                    || error("Racket verson is required"),
-                  config.maybe[#'config]
-                    || error("configuration file is required"))
+  import "cmdline.rhm"
+  cmdline.parse(build_installer)

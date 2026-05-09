@@ -7,7 +7,7 @@ import:
 export:
   build_catalog
 
-fun build_catalog(racket_version):
+fun build_catalog(racket_version, ignored_config = #false):
   def base_dir = Path("compiled/repackage").to_absolute_path()
   println("Output for " +& racket_version +& " to " +& base_dir)
   def local_catalog_dir = base_dir +/ "local-catalog"
@@ -50,11 +50,5 @@ fun build_catalog(racket_version):
   )
 
 module main:
-  import:
-    rhombus/cmdline
-  def config:
-    cmdline.parse:
-      cmdline.flag "--version" #{racket-version}
-
-  build_catalog(config.maybe[#'version]
-                  || error("Racket verson is required"))
+  import "cmdline.rhm"
+  cmdline.parse(build_catalog, ~no_config: #true)

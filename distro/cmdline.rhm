@@ -1,0 +1,18 @@
+#lang rhombus/static
+import:
+  rhombus/cmdline
+
+export:
+  parse
+
+fun parse(build, ~no_config = #false):
+  def config:
+    cmdline.parse:
+      cmdline.flag "--version" #{racket-version}
+      cmdline.flag "--config" file
+
+  build(config.maybe[#'version]
+          || error("Racket verson is required"),
+        config.maybe[#'config]
+          || no_config
+          || error("configuration file is required"))
