@@ -4,10 +4,11 @@
       rhombus open:
         except:
           div
-      html
-      html/page open)
+      html/page open
+      html.write
+    "html_ref.rhm")
 
-@(def content = @rhombus(html.Content, ~annot))
+@(def content = html_ref.Content)
 @(def html_lib_doc = ModulePath'lib("rhombus/html/scribblings/rhombus-html.scrbl")')
 
 @(def html_eval = make_rhombus_eval())
@@ -27,14 +28,14 @@
 For general HTML parsing and rendering support, see @rhombusmodname(html).
 
 The @rhombusmodname(html/page) library builds on the
-@rhombusmodname(html) library with a @rhombus(html) syntactic formk. the
-@rhombus(html) form resembles the @rhombus(html.syntax) form for writing
+@rhombusmodname(html) library with a @rhombus(html) syntactic form. the
+@rhombus(html) form resembles the @html_ref.syntax form for writing
 @tech(~doc: html_lib_doc){HTML syntax objects}, but it differs in several
 key ways:
 
 @itemlist(
 
- @item{@rhombus(html) produces an @rhombus(html.Element), not a syntax object;}
+ @item{@rhombus(html) produces an @(html_ref.Element), not a syntax object;}
 
  @item{the body forms and attribute right-hand sides of @rhombus(html)
  are expressions, not quoted syntax positions that must be escaped to
@@ -42,8 +43,8 @@ key ways:
 
  @item{@rhombus(html) is defined alongside @rhombus(head),
  @rhombus(body), @rhombus(div), @rhombus(span), @rhombus(a), and more
- forms, all of which produce @rhombus(html.Element)s intended to be
- incorporated into other @rhombus(html.Element)s; and}
+ forms, all of which produce @(html_ref.Element)s intended to be
+ incorporated into other @(html_ref.Element)s; and}
 
  @item{each element form like @rhombus(div) or @rhombus(a) provides a
  definition form @rhombus(div.def, ~decl) or @rhombus(a.def, ~decl) for
@@ -80,7 +81,8 @@ key ways:
                       ~text_color: "forestgreen"
             "The End"
   ~repl:
-    html.write(page)
+    import html.write
+    write(page)
 )
 
 @doc(
@@ -136,16 +138,25 @@ key ways:
 @doc(
   ~nonterminal:
     attr_expr: block expr
+    parent_id: block id
 
-  decl.nestable_macro 'html.def $id:
+  decl.nestable_macro 'html.def $id $maybe_implies:
                          $attr_keyword: $attr_expr
                          ...'
+  grammar maybe_implies
+  | ~implies $parent_id ...
+  | ϵ
 ){
 
  For use with @rhombus(styles), defines @rhombus(id) as a syntactic form
  similar to @rhombus(html), but adding an implicit @rhombus(~class)
  attribute to each use of @rhombus(id) whose value is the string form of
- @rhombus(id) with @litchar{_}  replaced by @litchar{-}.
+ @rhombus(id) with @litchar{_} replaced by @litchar{-}.
+
+ If @rhombus(~implies) is provided with one or more
+ @rhombus(parent_id)s, then each @rhombus(parent_id) must have been
+ similarly defined, and the @rhombus(~class) attribute added by
+ @rhombus(id) includes the names added by all @rhombus(parent_id)s.
 
  Forms like @rhombus(div.def, ~decl), @rhombus(span.def, ~decl), and
  @rhombus(a.def, ~decl) work the same way, and they differ only in the

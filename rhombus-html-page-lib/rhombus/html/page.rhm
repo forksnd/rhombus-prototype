@@ -34,7 +34,7 @@ fun check_attrs(name, attrs :~ List):
             error.val(val),
             ~srcloc: srcloc)
 
-fun make_styled(name, style_name = #false, spec = [], prefix = #false, styles = #false)
+fun make_styled(name, style_name = #false, spec = [], prefix = #false, styles = #false, implies = "")
   :~ Function.assume_of((~any) -> html_lib.Element):
     check_attrs(style_name, spec)
     let full_style_name = style_name // maybe add an option to use `prefix`...
@@ -76,8 +76,11 @@ fun make_styled(name, style_name = #false, spec = [], prefix = #false, styles = 
         [html_lib.Attribute(~name: to_string(kw), ~value: to_string(val)), ...]
       html_lib.Element(~name: name,
                        ~attributes: if full_style_name
-                                    | List.cons(html_lib.Attribute(~name: "class",
-                                                                   ~value: hyphenate(full_style_name)),
+                                    | List.cons(html_lib.Attribute(
+                                                  ~name: "class",
+                                                  ~value: hyphenate((full_style_name :~ String)
+                                                                      ++ implies)
+                                                ),
                                                 attrs)
                                     | attrs,
                        ~content: content)
@@ -114,24 +117,40 @@ class StyleSet(private styles):
   method to_css() :~ String:
     all_styles(styles)
 
+meta syntax_class MaybeImplies
+| '~implies $(id :: Identifier) ...'
+| '':
+    field [id, ...] = []
+
+space.enforest style_class:
+  space_path html/page/style
+  macro_definer macro
+  meta_namespace style_class_meta:
+    parse_syntax_class Parsed
+
 meta fun parse_def(ns_id, stx):
   match stx
-  | '$self $(id :: Identifier):
+  | '$self $(id :: Identifier) $(implies :: MaybeImplies):
        $(kw :: Keyword): $val
        ...':
       let [styles, prefix] = syntax_parameter_meta.lookup('styles_id')
       unless styles
       | syntax_meta.error("not within a `styles` body", stx)
+      let implies_str:
+        match [implies.id, ...]
+        | ['$(str :: style_class_meta.Parsed)', ...]: String.append(" " ++ str.unwrap(), ...)
       '«
          def proc = make_styled($ns_id,
                                 $(to_string(id)),
                                 [[#' $kw, $val, $(val.srcloc())],
                                  ...],
                                 $prefix,
-                                $styles)
+                                $styles,
+                                $implies_str)
          expr.macro '$id $('$')_ $('...')':
            ~all_stx: stx
            parse_styled('proc', stx)
+         style_class.macro '$id': '$(to_string(id))'
          export $id
         »'
 
