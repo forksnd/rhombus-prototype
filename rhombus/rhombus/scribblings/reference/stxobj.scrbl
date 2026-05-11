@@ -176,7 +176,9 @@ or adjusted in any way
  are bound as @tech{repetitions}. A @rhombus(#,(dots) ~nonempty) following a subpattern
  matches one or more instances, instead of zero or more instances. A
  @rhombus(#,(dots) ~once) following a subpattern
- matches zero instances or one instance. Multiple
+ matches zero instances or one instance. A
+ @rhombus(#,(dots) ~nongreedy) following a subpattern
+ may be supported in the future, but it is currently a syntax error. Multiple
  @dots can appear within a sequence; when matching
  is ambiguous, matching prefers earlier @dots repetitions to
  later ones.

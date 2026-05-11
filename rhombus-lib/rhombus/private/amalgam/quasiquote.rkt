@@ -70,6 +70,9 @@
     (pattern (~seq (~var || (:... in-space)) #:once)
              #:when repetition-mode?
              #:attr mode 'once)
+    (pattern (~seq (~var || (:... in-space)) #:nongreedy)
+             #:when repetition-mode?
+             #:attr mode 'nongreedy)
     (pattern (~seq (~var || (:... in-space)))
              #:attr mode #f)
     (pattern (~seq (group (~var || (:... in-space)) #:nonempty))
@@ -78,6 +81,9 @@
     (pattern (~seq (group (~var || (:... in-space)) #:once))
              #:when repetition-mode?
              #:attr mode 'once)
+    (pattern (~seq (group (~var || (:... in-space)) #:nongreedy))
+             #:when repetition-mode?
+             #:attr mode 'nongreedy)
     (pattern (~seq (group (~var || (:... in-space))))
              #:attr mode #f)
     (pattern (~seq (_::block (group (~var || (:... in-space))) #:nonempty))
@@ -86,6 +92,9 @@
     (pattern (~seq (_::block (group (~var || (:... in-space))) #:once))
              #:when repetition-mode?
              #:attr mode 'once)
+    (pattern (~seq (_::block (group (~var || (:... in-space))) #:nongreedy))
+             #:when repetition-mode?
+             #:attr mode 'nongreedy)
     (pattern (~seq (_::block (group (~var || (:... in-space)))))
              #:attr mode #f))
   (define-splicing-syntax-class (:esc dotted? any-id?)
@@ -324,6 +333,9 @@
             (define dots (case (attribute op.mode)
                            [(nonempty) (quote-syntax ...+)]
                            [(once) (quote-syntax ...1)]
+                           [(nongreedy) (raise-syntax-error #f
+                                                            "nongreedy repetition matching is not yet supported"
+                                                            #'op.name)]
                            [else (quote-syntax ...)]))
             (if allow-flatten?
                 (loop #'gs new-pend-idrs new-pend-sidrs new-pend-vars
