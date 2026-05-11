@@ -135,7 +135,16 @@ class PictIdentity(mutable desc):
     base ++ [me]
 
 fun genident(desc = #false):
-  PictIdentity(desc)
+  fun simplify(desc, strip = #false):
+    match desc
+    | d :: PictIdentity:
+        simplify(d.desc, strip)
+    | [tag, desc, _, ...]:
+        if strip
+        | simplify(desc, #true)
+        | [tag, simplify(desc, #true)]
+    | ~else: desc
+  PictIdentity(simplify(desc, #false))
 
 expr.macro 'METHOD($name, $arg, ...)':
   'fun (this :~ _Pict): this . $name($arg, ...)'
