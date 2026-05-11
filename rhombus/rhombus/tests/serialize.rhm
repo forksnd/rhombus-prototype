@@ -128,6 +128,13 @@ class SteamTrain(engine, caboose, private hp):
 class PassengerTrain(capacity):
   extends SteamTrain
   serializable
+  private implements Equatable
+  private override equals(other :~ PassengerTrain, recur):
+    other.engine == engine && other.caboose == caboose
+      && other.horsepower() == horsepower()
+      && other.capacity == capacity
+  private override hash_code(recur):
+    0
 block:
   let v = PassengerTrain(0, 1, 100)
   check deserialize(serialize(v)) ~is v

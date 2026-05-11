@@ -88,6 +88,7 @@
    custom-constructor-maybe-arity ; #f (default), #t (unknown), or arity
    custom-binding?
    custom-annotation?
+   opaque                ; #t, #f, or (list boolean ...) in parallel to `all-fields` or `fields`
    reconstructor-fields  ; #f or (list (cons field-sym accessor-id) ...)
    defaults-id           ; #f if no arguments with defaults
    call-method-id        ; #f or identifier as private `call` (for Callable) whose static info is relevant
@@ -506,9 +507,12 @@
    (for/or ([mut (in-list (syntax->list constructor-field-mutables))])
      (syntax-e mut))))
 
-(define (print-field-shapes super fields keywords exposures)
-  (append
-   (if super
+(define (print-field-shapes super fields keywords exposures opaque?)
+  (define super-shapes
+    (cond
+      [(not super) null]
+      [(eq? (class-desc-opaque super) #t) '(opaque)]
+      [else
        (let ([shapes (for/list ([fld (in-list (class-desc-fields super))]
                                 #:do [(define arg (field-desc-constructor-arg fld))])
                        (if (identifier? arg)
@@ -522,33 +526,61 @@
                              [else
                               (field-desc-name fld)])))])
          (define all-fields (class-desc-all-fields super))
-         (if all-fields
-             ;; insert `#f`s for private and protected fields
-             (let loop ([all-fields all-fields] [shapes shapes])
-               (cond
-                 [(null? all-fields) null]
-                 [(null? shapes)
-                  ;; only private/protected fields left
-                  (cons #f (loop (cdr all-fields) shapes))]
-                 [(symbol? (car all-fields))
-                  ;; public, maybe keyword
-                  (cons (car shapes)
-                        (loop (cdr all-fields) (cdr shapes)))]
-                 [else
-                  ;; private/protected
-                  (cons #f
-                        (loop (cdr all-fields) shapes))]))
-             shapes))
-       null)
-   (let loop ([fields fields] [keywords keywords] [exposures exposures])
-     (cond
-       [(null? keywords) '()]
-       [(not (eq? (car exposures) 'public))
-        (cons #f (loop (cdr fields) (cdr keywords) (cdr exposures)))]
-       [else
-        (cons (or (syntax-e (car keywords))
-                  (syntax-e (car fields)))
-              (loop (cdr fields) (cdr keywords) (cdr exposures)))]))))
+         (cond
+           [all-fields
+            ;; insert `#f`s for private and protected fields
+            (let loop ([all-fields all-fields] [shapes shapes] [opaque (class-desc-opaque super)] [opaque-seq? #f])
+              (cond
+                [(null? all-fields) null]
+                [(and opaque (car opaque))
+                 (define r (loop (cdr all-fields)
+                                 (if (and (pair? shapes) (symbol? (car all-fields))) (cdr shapes) shapes)
+                                 (cdr opaque)
+                                 #t))
+                 (if opaque-seq?
+                     r
+                     (cons 'opaque r))]
+                [(null? shapes)
+                 ;; only private/protected fields left
+                 (cons #f (loop (cdr all-fields) null (and opaque (cdr opaque)) #f))]
+                [(symbol? (car all-fields))
+                 ;; public, maybe keyword
+                 (cons (let ([a (car shapes)])
+                         (if (keyword? a) a #t))
+                       (loop (cdr all-fields) (cdr shapes) (and opaque (cdr opaque)) #f))]
+                [else
+                 ;; private/protected
+                 (cons #f
+                       (loop (cdr all-fields) shapes (and opaque (cdr opaque)) #f))]))]
+           [(class-desc-opaque super)
+            (let loop ([shapes shapes] [opaque (class-desc-opaque super)] [opaque-seq? #f])
+              (cond
+                [(null? shapes) null]
+                [(car opaque)
+                 (define r (loop (cdr shapes) (cdr opaque) #t))
+                 (if opaque-seq?
+                     r
+                     (cons 'opaque r))]
+                [else
+                 (cons (car shapes) (loop (cdr shapes) (cdr opaque) #f))]))]
+           [else
+            shapes]))]))
+  (define opaque-seq? (and (pair? super-shapes) (eq? 'opaque (car (reverse super-shapes)))))
+  (append
+   super-shapes
+   (if opaque?
+       (if opaque-seq?
+           null
+           (list 'opaque))
+       (let loop ([fields fields] [keywords keywords] [exposures exposures])
+         (cond
+           [(null? keywords) '()]
+           [(not (eq? (car exposures) 'public))
+            (cons #f (loop (cdr fields) (cdr keywords) (cdr exposures)))]
+           [else
+            (cons (or (syntax-e (car keywords))
+                      (and (syntax-e (car fields)) #t))
+                  (loop (cdr fields) (cdr keywords) (cdr exposures)))])))))
 
 (define (make-accessor-names name field-ids intro)
   (for/list ([field-id (in-list field-ids)])

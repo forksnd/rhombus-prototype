@@ -344,6 +344,7 @@
                                     #f ; not custom constructor
                                     #f ; not custom binding
                                     #f ; not custom annotation
+                                    #f ; no opaque
                                     #f ; no functional-update specialization
                                     #f ; no arguments with defaults
                                     #f ; not callable

@@ -666,6 +666,9 @@
  through the enclosing class's annotation (not a subclass annotation) or
  through an @rhombus(internal, ~class_clause) identifier's annotation.
 
+ Using @rhombus(private, ~class_clause) for a field declaration in a
+ class implies @rhombus(opaque, ~class_clause) for the class.
+
 }
 
 @doc(
@@ -963,8 +966,20 @@
 ){
 
  When a @tech{class clause} is @rhombus(opaque, ~class_clause), then the
- default printed form of a class instance does not show fields, and instead prints
- @litchar{...} in parentheses after the class name.
+ default printed form of a class instance does not show fields, and
+ instead prints @litchar{....} in parentheses in place of the field
+ sequence (but see @rhombus(Printable, ~class)). Also, its default
+ equality implementation for @rhombus(==) and @rhombus(is_now) is
+ @rhombus(===) (but see @rhombus(Equatable, ~class)).
+
+ An opaque class can extend a non-opaque class and vice versa. For
+ printing, only a contiguous sequence of fields from opaque classes are
+ replaced by @litchar{....}. For equality, a non-opaque class with
+ an opaque ancestor behaves like an opaque class, i.e., it uses
+ @rhombus(===) by default.
+
+ The @rhombus(opaque, ~class_clause) is implicit for a class that has
+ @rhombus(private, ~class_clause) or @rhombus(protected, ~class_clause) fields.
 
 }
 

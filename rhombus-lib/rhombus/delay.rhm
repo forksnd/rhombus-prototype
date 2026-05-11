@@ -39,7 +39,7 @@ class Delay(private _handle):
     PrintDesc.list("Delay(",
                    if is_forced()
                    | [PrintDesc.block("fun ()", recur(force()))]
-                   | ["..."],
+                   | ["...."],
                    ")")
 
   export:

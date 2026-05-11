@@ -2,6 +2,8 @@
 @(import:
     "common.rhm" open)
 
+@(def priv_prot = @elem{@rhombus(private, ~class_clause)/@rhombus(protected, ~class_clause)})
+  
 @title(~tag: "Equatables"){Equatables}
 
 Any value is @deftech{equatable}. Implementing the @rhombus(Equatable, ~class)
@@ -38,7 +40,7 @@ interface customizes the way that instances of a class are compared for
 
   If two objects are equal in the sense of @rhombus(===), then they are
   automatically also equal by @rhombus(==). An @rhombus(equals, ~datum)
-  method implementation is never called on an obejct with itself as
+  method implementation is never called on an object with itself as
   @rhombus(other, ~var).}
 
  @item{@rhombus(#,(@rhombus(hash_code, ~datum))(#,(@rhombus(recur, ~var)))):
@@ -72,10 +74,15 @@ interface customizes the way that instances of a class are compared for
 )
 
  A class gets a default equality implementation that recurs to compare
- fields for @rhombus(==) only if the class has no mutable fields.
- When the class has mutable fields, is default equality implementation
- for @rhombus(==) uses @rhombus(===) comparisons. The default equality
- implementation always recurs to fields for @rhombus(is_now) comparisons.
+ fields for @rhombus(==) only if the class has no mutable fields, no
+ @priv_prot fields, and is not declared @rhombus(opaque, ~class_clause);
+ otherwise, its default @rhombus(==) implementation is @rhombus(===).
+ If a class has mutable fields but no @priv_prot fields and is not
+ @rhombus(opaque, ~class_clause), its default @rhombus(is_now)
+ implementation recurs to fields (unlike its default @rhombus(==)
+ implementation). When a class has @priv_prot fields or is declared
+ @rhombus(opaque, ~class_clause), its default equality implementation
+ for both @rhombus(==) and @rhombus(is_now) is @rhombus(===).
 
  The @rhombus(Equatable, ~class) interface normally should be implemented
  @rhombus(private, ~class_clause)ly, so that the methods do not have to

@@ -340,7 +340,8 @@
                         1
                         'write-special
                         (default-struct-print v (lambda (v [mode mode]) (pretty v mode ht))))))]
-    [(struct? v)
+    [(or (struct? v)
+         (print-field-shapes? v))
      (fresh-ref
       v
       (lambda ()
@@ -551,7 +552,9 @@
 (define (set-get-exn-name! proc) (set! get-exn-name proc))
 
 (define (default-struct-print v recur)
-  (define vec (struct->vector v))
+  (define vec (struct->vector v
+                              ;; arbitary private value
+                              get-exn-name))
   (pretty-listlike
    (pretty-concat
     (pretty-write (cond
@@ -564,18 +567,24 @@
       => (lambda (shapes)
            (cond
              [(eq? shapes 'opaque)
-              (list (pretty-text "..."))]
+              (list (pretty-text "...."))]
              [else
               (for/list ([i (in-range 1 (vector-length vec))]
                          [s (in-list shapes)]
                          #:when s)
-                (if (keyword? s)
-                    (pretty-blocklike (pretty-text (string-append "~" (keyword->immutable-string s)))
-                                      (recur (vector-ref vec i)))
-                    (recur (vector-ref vec i) 'expr)))]))]
+                (cond
+                  [(eq? s 'opaque) (pretty-text "....")]
+                  [(keyword? s)
+                   (pretty-blocklike (pretty-text (string-append "~" (keyword->immutable-string s)))
+                                     (recur (vector-ref vec i)))]
+                  [else
+                   (recur (vector-ref vec i) 'expr)]))]))]
      [else
       (for/list ([i (in-range 1 (vector-length vec))])
-        (recur (vector-ref vec i) 'expr))])
+        (define v (vector-ref vec i))
+        (if (eq? v get-exn-name)
+            (pretty-text "....")
+            (recur v 'expr)))])
    (pretty-text ")")))
 
 (define (racket-print v op mode)

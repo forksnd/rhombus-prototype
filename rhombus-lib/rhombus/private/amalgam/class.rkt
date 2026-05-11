@@ -727,7 +727,7 @@
                                                    ...]
                                                   [super-name* ... interface-name ...]))
                (build-class-struct super
-                                   fields mutables constructor-keywords exposures final? authentic? prefab? opaque?
+                                   fields mutables constructor-keywords exposures final? authentic? prefab? opaque? has-private-fields?
                                    method-mindex method-names method-vtable method-private
                                    abstract-name
                                    interfaces private-interfaces protected-interfaces
@@ -847,7 +847,7 @@
                                  constructor-public-defaults super-defaults
                                  constructor-keywords super-constructor+-keywords ; includes private fields for internal constructor
                                  constructor-defaults super-constructor+-defaults
-                                 final? has-private-fields? exposures
+                                 final? has-private-fields? opaque? exposures fields
                                  parent-name interface-names all-interfaces private-interfaces protected-interfaces
                                  method-mindex method-names method-vtable method-results method-private
                                  dots custom-constructor-maybe-arity
@@ -903,7 +903,7 @@
                 #,@post-forms))))])))
 
 (define-for-syntax (build-class-struct super
-                                       fields mutables constructor-keywords exposures final? authentic? prefab? opaque?
+                                       fields mutables constructor-keywords exposures final? authentic? prefab? opaque? has-private-fields?
                                        method-mindex method-names method-vtable method-private
                                        abstract-name
                                        interfaces private-interfaces protected-interfaces
@@ -1078,10 +1078,13 @@
                                                                                  (hasheq (~@ 'property-name property-proc)
                                                                                          ...)))))
                                                           #,@(cond
-                                                               [opaque? #`((cons prop:print-field-shapes 'opaque))]
+                                                               [(and (or opaque? has-private-fields?)
+                                                                     (or (not super)
+                                                                         (eq? (class-desc-opaque super) 'opaque)))
+                                                                #`((cons prop:print-field-shapes 'opaque))]
                                                                [else
                                                                 (define field-print-shapes
-                                                                  (print-field-shapes super fields constructor-keywords exposures))
+                                                                  (print-field-shapes super fields constructor-keywords exposures (or opaque? has-private-fields?)))
                                                                 (if (or abstract-name
                                                                         (and (andmap symbol? field-print-shapes)
                                                                              (not has-extra-fields?)))
@@ -1125,7 +1128,10 @@
                                                                                      #'(#%variable-reference))
                                                                                #,(and (syntax-e #'ds-rhs) #t))))]
                                                                [_ null])))
-                                            #,(if prefab? (quote-syntax 'prefab) #f)
+                                            #,(cond
+                                                [prefab? (quote-syntax 'prefab)]
+                                                [(or opaque? has-private-fields?) #'(current-inspector)]
+                                                [else #f])
                                             #f
                                             '(immutable-field-index ...)
                                             #f
@@ -1182,7 +1188,7 @@
                                      constructor-public-defaults super-defaults
                                      constructor-keywords super-constructor+-keywords
                                      constructor-defaults super-constructor+-defaults
-                                     final? has-private-fields? exposures
+                                     final? has-private-fields? opaque? exposures new-fields
                                      parent-name interface-names all-interfaces private-interfaces protected-interfaces
                                      method-mindex method-names method-vtable method-results method-private
                                      dots custom-constructor-maybe-arity
@@ -1308,6 +1314,22 @@
                         '#,custom-constructor-maybe-arity
                         #,(and (hash-ref options 'binding-rhs #f) #t)
                         #,(and (hash-ref options 'annotation-rhs #f) #t)
+                        '#,(let ([opaque? (or opaque? has-private-fields?)])
+                             (cond
+                               [(or (not super)
+                                    (eq? (class-desc-opaque super) opaque?))
+                                opaque?]
+                               [else
+                                (append
+                                 (let ([super-opaque? (class-desc-opaque super)])
+                                   (cond
+                                     [(boolean? super-opaque?)
+                                      (for/list ([i (in-list (or (class-desc-all-fields super)
+                                                                 (class-desc-fields super)))])
+                                        super-opaque?)]
+                                     [else super-opaque?]))
+                                 (for/list ([i (in-list new-fields)])
+                                   opaque?))]))
                         #,(if force-custom-recon?
                               #`(list (cons 'recon-field-name (quote-syntax recon-field-acc)) ...)
                               #f)
