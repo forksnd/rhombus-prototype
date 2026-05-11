@@ -73,8 +73,7 @@ key ways:
             sans.to_css()
         main_body:
           h1: the_title
-          div:
-            @{It's @(emph: "great")!}
+          @div{It's @emph{great}!}
           div:
             ~style: css:
                       ~font_style: "italic"
@@ -98,6 +97,9 @@ key ways:
       ...
       $content_expr
       ...
+  | ($attr_keyword: $attr_expr,
+     ...,
+     [$content_expr, ...])
 ){
 
  The @rhombus(html) form expands to a
@@ -126,11 +128,24 @@ key ways:
  @rhombus(div.def).
 
 @examples(
-  ~eval: html_eval  
+  ~eval: html_eval
   ~repl:
     html:
       ~age: 42
       "Hello"
+)
+
+ The second form of @rhombus(attrs_and_body), using
+ @rhombus([(@(elem{…}))]) instead of a @rhombus(:) block, is intended for
+ use via @litchar("@") notation, especially with @rhombus(span)-like
+ forms that are inline within text.
+
+@examples(
+  ~eval: html_eval
+  ~repl:
+    '@{This is @b{Hello}, @i(~color: "blue"){goodbye}.}'
+    div:
+      @{This is @b{Hello}, @i(~color: "blue"){goodbye}.}
 )
 
 }

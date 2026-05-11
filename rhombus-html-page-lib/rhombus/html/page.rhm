@@ -94,6 +94,8 @@ meta:
          $arg
          ...':
         '$proc([[#' $kw, $rhs, $(rhs.srcloc())], ...], [$arg, ...], [$(arg.srcloc()), ...])'
+    | '$_($(kw :: Keyword): $rhs, ..., [$arg, ...])':
+        '$proc([[#' $kw, $rhs, $(rhs.srcloc())], ...], [$arg, ...], [$(arg.srcloc()), ...])'
 
 syntax_parameter.bridge styles_id:
   [#false, #false]
