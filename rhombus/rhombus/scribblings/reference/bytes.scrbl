@@ -339,8 +339,10 @@ like @rhombus(<) and @rhombus(>) work on byte strings.
   Bytes.from_list([104, 105, 33])
 )
 
-}
+ A byte string is not @tech{listable}, so conversion to a list occurs
+ only with an explicit operation like @rhombus(Bytes.to_list).
 
+}
 
 @doc(
   method (bstr :: Bytes).to_sequence(bstr :: Bytes) :: Sequence

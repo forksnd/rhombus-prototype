@@ -610,6 +610,9 @@ Strings are @tech{comparable}, which means that generic operations like
   String.from_list([Char"e", Char"t", Char"c", Char"."])
 )
 
+ A string is not @tech{listable}, so conversion to a list occurs only
+ with an explicit operation like @rhombus(String.to_list).
+
 }
 
 @doc(
