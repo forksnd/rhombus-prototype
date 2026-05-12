@@ -16,6 +16,9 @@
  two numbers representing an x-offset and y-offset, or to obtain one
  number representing a time offset in epochs.
 
+ See @secref("identity") for more information about pict identity and
+ @tech{findable children}.
+
 }
 
 @doc(
@@ -118,6 +121,9 @@
  @rhombus(pin) will produce an animated pict where the finder is used
  separately for each snapshot generated from the combined animated pict.
 
+ See @secref("identity") for more information about pict identity and
+ @tech{findable children}.
+
 }
 
 
@@ -133,6 +139,9 @@
  @rhombus(pict) of the the location is ambiguous, returns two
  @rhombus(#false)s instead of throwing an exception.
 
+ See @secref("identity") for more information about pict identity and
+ @tech{findable children}.
+
 }
 
 
@@ -143,6 +152,10 @@
  Applies @rhombus(finder) to @rhombus(pict) to get a time-box offset. An
  exception is thrown is a needed component pict cannot be found in
  @rhombus(pict).
+
+ The @rhombus(switch) function creates a pict with @tech{findable
+  children} that have time-box offsets. See @secref("identity") for more
+ information.
 
 }
 

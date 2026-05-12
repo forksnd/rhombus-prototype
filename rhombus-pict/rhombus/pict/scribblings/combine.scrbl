@@ -337,6 +337,9 @@
 
  If no @rhombus(pict)s are provided, the result is @rhombus(nothing).
 
+ See @secref("identity") for more information about the @tech{findable
+  children} of a pict constructed ith @rhombus(switch).
+
 @examples(
   ~eval: pict_eval
   ~repl:

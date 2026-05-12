@@ -42,6 +42,17 @@ start of its @tech{time box}, finding an animated pict within another
 animated more precisely returns the location of a snapshot within a
 snapshot.
 
+Not all @tech{findable children} of a pict are necessarily findable in
+every snapshot of the pict. The findable children of a pict constructed
+with @rhombus(switch) includes all of the arguments to @rhombus(switch),
+and @rhombus(Find.start_in) can find the epoch when a pict (possibly a
+descendant of an argument to @rhombus(switch)) starts within the
+animation sequence. Taking a snapshot of a @rhombus(switch) pict
+produces a pict with time-specific children, all of which can be found
+in the snapshot. Unlike @rhombus(switch), the result of
+@rhombus(animate) can only report snapshot-specific findable children,
+because getting children of the animation implicitly takes a snapshot.
+
 Potentially distinct from the @tech{findable children} of a pict are its
 @deftech{replaceable dependencies}, which are picts that can be
 discovered and replaced with @rhombus(Pict.rebuild) or
@@ -51,19 +62,14 @@ construction. The @rhombus(rebuildable) function creates a pict with
 only the listed dependencies, however, while the result of a
 @rhombus(rebuild, ~var) function supplied to @rhombus(rebuildable)
 determines its findable children. Similarly, @rhombus(animate) creates
-an animated pict @rhombus(p, ~var) with declared dependencies, and
-findable children corresponds to a snapshot. Note that the findable
-children of a @rhombus(rebuildable) instance or @rhombus(animate)
-snapshot can vary over time or configuration; for example, an
-@rhombus(animate) snapshot might include some of its dependencies only
-at certain times, and a @rhombus(rebuildable) configuration might chose
-one or the other of its dependencies based on some comparison of the
-dependencies; declaring dependencies explicitly makes replacement
-consistent.
+an animated pict @rhombus(p, ~var) with declared dependencies. In
+general, the findable children of a pict, such as one from
+@rhombus(rebuildable) or @rhombus(animate), can vary over time or
+configuration, but its replaceable dependencies stay the same.
 
 Similar to the way that @rhombus(Pict.snapshot) produces a pict with the
 same findable and replaceable identity as the snapshotted pict, a
-rebuilt pict via @rhombus(Pict.rebuild) similarly gets an identity
+rebuilt pict via @rhombus(Pict.rebuild) gets an identity
 matching the original pict. This rule also allows the rebuilt version of
 some pict @rhombus(p, ~var) to be found within a rebuilt version of
 @rhombus(q, ~var) in the case that a dependency of @rhombus(p, ~var) is

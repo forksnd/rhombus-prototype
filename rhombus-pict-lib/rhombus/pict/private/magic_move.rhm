@@ -23,9 +23,7 @@ fun magic_move(all_pre :: Pict, post :: Pict,
     ~deps: [all_pre, post],
     fun (~deps: [all_pre :: Pict, post :: Pict]):
       let pre:
-        if all_pre.duration == 1
-        | all_pre
-        | all_pre.time_pad(~before: -(all_pre.duration - 1))
+        all_pre.snapshot(all_pre.duration - 1)
       fun get_common(start_p :~ Pict, other_p :~ Pict, intro :~ List) :~ values(Map, Set):
         if common
         | values(for Map (p in common!!):
