@@ -85,7 +85,7 @@
   (define/arity (syntax_meta.value id/op
                                    [sp expr-space-path]
                                    [fail (lambda ()
-                                           (raise-syntax-error who "no binding" id/op))])
+                                           (raise-syntax-error who "unbound identifier" id/op))])
     (define id (extract-name/sp who id/op sp))
     (syntax-local-value id (if (and (procedure? fail)
                                     (procedure-arity-includes? fail 0))

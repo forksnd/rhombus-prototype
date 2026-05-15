@@ -40,7 +40,7 @@
   fun syntax_meta.value(name :: Name,
                         in_space :: SpaceMeta = expr_meta.space,
                         fail :: Any:
-                          fun (): throw Exn.Fail.Contract(....))
+                          fun (): throw Exn.Fail.Syntax(....))
     :: Any
 ){
 
